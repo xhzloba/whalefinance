@@ -77,6 +77,13 @@ export const StyledAccordion = styled(Accordion)(({ theme }) => ({
   borderRadius: "8px !important",
 }));
 
+const StyledAccordinWithLinearBackground = styled(StyledAccordion)(
+  ({ theme }) => ({
+    background:
+      "linear-gradient(135deg, #171717 0%, #2c323c 50%, #5858f5 100%) !important",
+  })
+);
+
 const FinanceTracker = ({ themeColor, onColorChange }) => {
   const [transactions, setTransactions] = useState([]);
   const [savingsBalance, setSavingsBalance] = useState(133000); // Добавляем состояние для накопительного счета
@@ -409,16 +416,14 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
             <Grid item xs={12} md={8} lg={6}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Paper sx={{ ...paperStyle, p: 1 }}>
-                    <Summary
-                      balance={balance}
-                      lastIncomeDate={lastIncomeDate}
-                      lastIncomeAmount={lastIncomeAmount}
-                      currentMonthExpenses={currentMonthExpenses}
-                      progressValue={progressValue}
-                      transactions={transactions}
-                    />
-                  </Paper>
+                  <Summary
+                    balance={balance}
+                    lastIncomeDate={lastIncomeDate}
+                    lastIncomeAmount={lastIncomeAmount}
+                    currentMonthExpenses={currentMonthExpenses}
+                    progressValue={progressValue}
+                    transactions={transactions}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <StyledAccordion
@@ -455,7 +460,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <TransactionList
-                        transactions={transactions} // Передаем все транзакции
+                        transactions={transactions}
                         onDeleteTransaction={deleteTransaction}
                         selectedMonth={selectedMonth}
                         onMonthChange={handleMonthChange}
@@ -466,27 +471,24 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
               </Grid>
             </Grid>
             <Grid item xs={12} lg={3}>
-              <Paper
-                sx={{ ...paperStyle, p: 2, height: "auto", marginBottom: 3 }}
-              >
-                <ExpenseAnalysis transactions={transactions} />
-              </Paper>
-
-              <StyledAccordion
+              <ExpenseAnalysis transactions={transactions} />
+              <StyledAccordinWithLinearBackground
                 expanded={expanded.panel3}
                 onChange={handleChange("panel3")}
               >
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
+                  expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
                   aria-controls="panel3bh-content"
                   id="panel3bh-header"
                 >
-                  <Typography variant="h6">Лимиты расходов</Typography>
+                  <Typography sx={{ color: "white" }} variant="h6">
+                    Лимиты расходов
+                  </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <CategoryLimits transactions={transactions} />
                 </AccordionDetails>
-              </StyledAccordion>
+              </StyledAccordinWithLinearBackground>
             </Grid>
           </Grid>
         </StyledContainer>

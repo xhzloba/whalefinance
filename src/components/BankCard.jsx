@@ -43,19 +43,13 @@ const CardSide = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const CardFront = styled(CardSide)(({ bgcolor }) => ({
-  background: `linear-gradient(45deg, ${bgcolor} 0%, ${adjustColor(
-    bgcolor,
-    20
-  )} 100%)`,
+const CardFront = styled(CardSide)(({ theme }) => ({
+  background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
 }));
 
-const CardBack = styled(CardSide)(({ bgcolor }) => ({
-  background: `linear-gradient(45deg, ${adjustColor(
-    bgcolor,
-    -20
-  )} 0%, ${bgcolor} 100%)`,
+const CardBack = styled(CardSide)(({ theme }) => ({
+  background: "linear-gradient(45deg, #008793 0%, #004d7a 50%, #051937 100%)",
   transform: "rotateY(180deg)",
 }));
 
@@ -137,7 +131,6 @@ const BankCard = ({
   lastIncomeAmount,
   addTransaction,
   handleMonthChange,
-  themeColor,
 }) => {
   console.log("BankCard рендеринг:", {
     balance,
@@ -171,7 +164,7 @@ const BankCard = ({
     <>
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
-          <CardFront bgcolor={themeColor}>
+          <CardFront>
             <Box
               sx={{
                 position: "absolute",
@@ -248,7 +241,7 @@ const BankCard = ({
               <Typography variant="body2">12/25</Typography>
             </Box>
           </CardFront>
-          <CardBack bgcolor={themeColor}>
+          <CardBack>
             <MagneticStrip />
             <Box>
               <Typography variant="body2" gutterBottom>

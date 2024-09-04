@@ -78,9 +78,32 @@ function Summary({
   };
 
   return (
-    <Box>
+    <Paper
+      elevation={3}
+      sx={{
+        background:
+          "linear-gradient(135deg, #002f4e 0%, #004d7a 50%, #008793 100%)",
+        borderRadius: "12px",
+        color: "white",
+        overflow: "hidden",
+      }}
+    >
       <Box>
-        <Tabs value={tabValue} onChange={handleTabChange} centered>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          centered
+          sx={{
+            "& .MuiTab-root": { color: "rgba(255, 255, 255, 0.7)" },
+            "& .Mui-selected": { color: "white" },
+            "& .MuiTabs-indicator": { backgroundColor: "white" },
+            background: "#004973",
+            boxShadow: `
+    3px 1px 3px #007e8f,
+    inset 2px 5px 23px black
+  `,
+          }}
+        >
           <Tab icon={<TrendingUpIcon />} label="Доходы" />
           <Tab icon={<TrendingDownIcon />} label="Расходы" />
           <Tab icon={<BarChartIcon />} label="Графики" />
@@ -118,7 +141,7 @@ function Summary({
             sx={{
               height: 10,
               borderRadius: 5,
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              backgroundColor: "rgba(255, 255, 255, 0.3)",
               "& .MuiLinearProgress-bar": {
                 borderRadius: 5,
                 backgroundColor: getProgressColor(progressValue),
@@ -130,12 +153,21 @@ function Summary({
           <Box sx={{ height: 300 }}>
             <Doughnut
               data={doughnutChartData}
-              options={{ maintainAspectRatio: false }}
+              options={{
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    labels: {
+                      color: "white",
+                    },
+                  },
+                },
+              }}
             />
           </Box>
         </TabPanel>
       </Box>
-    </Box>
+    </Paper>
   );
 }
 

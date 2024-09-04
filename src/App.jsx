@@ -11,7 +11,7 @@ import "./App.css";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [themeColor, setThemeColor] = useState("#21A038");
+  const [themeColor, setThemeColor] = useState("#1976d2");
   const auth = getAuth();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const App = () => {
   });
 
   const handleColorChange = () => {
-    const colors = ["#21A038", "#1976d2", "#9c27b0", "#ed6c02", "#d32f2f"];
+    const colors = ["#21A038", "#1976d2"];
     const currentIndex = colors.indexOf(themeColor);
     const nextIndex = (currentIndex + 1) % colors.length;
     setThemeColor(colors[nextIndex]);

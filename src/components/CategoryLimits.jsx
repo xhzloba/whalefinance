@@ -114,7 +114,38 @@ function CategoryLimits({ transactions }) {
           fullWidth
           size="small"
           displayEmpty
-          sx={{ mb: 1 }}
+          sx={{
+            mb: 1,
+            color: "white",
+            "& .MuiSelect-select": { color: "white" },
+            "& .MuiSelect-icon": { color: "white" },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.3)",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(63, 172, 255, 0.975)",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+            "& .MuiMenuItem-root": { color: "black" }, // Цвет текста в выпадающем меню
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                bgcolor: "white",
+                "& .MuiMenuItem-root": {
+                  color: "black",
+                  "&:hover": {
+                    bgcolor: "rgba(0, 0, 0, 0.04)",
+                  },
+                  "&.Mui-selected": {
+                    bgcolor: "rgba(0, 0, 0, 0.08)",
+                  },
+                },
+              },
+            },
+          }}
         >
           <MenuItem value="" disabled>
             Выберите категорию
@@ -132,13 +163,34 @@ function CategoryLimits({ transactions }) {
           onChange={handleLimitChange}
           fullWidth
           size="small"
-          sx={{ mb: 1 }}
+          sx={{
+            mb: 1,
+            color: "white",
+            "& .MuiInputBase-input": { color: "white" },
+            "& .MuiInputBase-input::placeholder": {
+              color: "rgba(255, 255, 255, 0.7)",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.3)",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(255, 255, 255, 0.5)",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+          }}
         />
-        <Button variant="contained" onClick={handleSave} fullWidth size="small">
+        <Button
+          sx={{ color: "white" }}
+          variant="contained"
+          onClick={handleSave}
+          fullWidth
+          size="small"
+        >
           {editingCategory ? "Обновить" : "Добавить"}
         </Button>
       </Box>
-
       <Box>
         {Object.entries(categoryLimits).map(([category, limit]) => {
           const spent = calculateSpent(category);
@@ -146,21 +198,34 @@ function CategoryLimits({ transactions }) {
           const progressColor = getProgressColor(progress);
 
           return (
-            <Paper key={category} elevation={2} sx={{ p: 1, mb: 1 }}>
+            <Paper
+              key={category}
+              elevation={2}
+              sx={{ p: 1, mb: 1, backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+            >
               <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                   mb: 1,
+                  color: "white",
                 }}
               >
-                <Typography variant="body2" noWrap sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="body2"
+                  noWrap
+                  sx={{ flexGrow: 1, color: "white" }}
+                >
                   {category}
                 </Typography>
                 <Tooltip title="Редактировать">
-                  <IconButton size="small" onClick={() => handleEdit(category)}>
-                    <EditIcon fontSize="small" />
+                  <IconButton
+                    sx={{ color: "white" }}
+                    size="small"
+                    onClick={() => handleEdit(category)}
+                  >
+                    <EditIcon sx={{ color: "white" }} fontSize="small" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Удалить">
@@ -168,11 +233,15 @@ function CategoryLimits({ transactions }) {
                     size="small"
                     onClick={() => handleDelete(category)}
                   >
-                    <DeleteIcon fontSize="small" />
+                    <DeleteIcon sx={{ color: "white" }} fontSize="small" />
                   </IconButton>
                 </Tooltip>
               </Box>
-              <Typography variant="caption" display="block">
+              <Typography
+                sx={{ color: "white" }}
+                variant="caption"
+                display="block"
+              >
                 {formatCurrency(spent)} / {formatCurrency(limit)}
               </Typography>
               <LinearProgress

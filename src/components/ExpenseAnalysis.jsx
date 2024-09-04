@@ -6,8 +6,10 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Paper,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { paperStyle } from "./FinanceTracker";
 
 function ExpenseAnalysis({ transactions }) {
   const [expanded, setExpanded] = useState(true);
@@ -140,63 +142,83 @@ function ExpenseAnalysis({ transactions }) {
   };
 
   return (
-    <Accordion
-      expanded={expanded}
-      onChange={() => setExpanded(!expanded)}
+    <Paper
       sx={{
-        background: "transparent",
-        boxShadow: "none",
-        "&:before": { display: "none" },
+        ...paperStyle,
+        p: 2,
+        height: "auto",
+        marginBottom: 3,
+        backdropFilter: "blur(10px)",
+        background:
+          "linear-gradient(135deg, #171717 0%, #2c323c 50%, #5858f5 100%)",
       }}
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6">Анализ расходов</Typography>
-      </AccordionSummary>
-      <AccordionDetails sx={{ padding: 2, paddingTop: 1 }}>
-        <Box>
-          {expenseAnalysis.sortedCategories.length > 0 ? (
-            <>
-              <Typography variant="subtitle1" gutterBottom>
-                Топ категорий расходов:
-              </Typography>
-              {expenseAnalysis.sortedCategories.slice(0, 3).map((category) => (
-                <Box key={category.category} sx={{ mb: 2 }}>
-                  <Typography variant="body2">
-                    {category.category}: {category.percentage.toFixed(1)}% (
-                    {formatCurrency(category.sum)})
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={category.percentage}
-                    sx={{
-                      height: 8,
-                      borderRadius: 5,
-                      backgroundColor: "rgba(0, 0, 0, 0.1)",
-                      "& .MuiLinearProgress-bar": {
-                        backgroundColor: getProgressColor(category.percentage),
-                      },
-                    }}
-                  />
-                </Box>
-              ))}
-              <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
-                Рекомендация:
-              </Typography>
+      <Accordion
+        expanded={expanded}
+        onChange={() => setExpanded(!expanded)}
+        sx={{
+          background: "transparent",
+          boxShadow: "none",
+          color: "white",
+          "&:before": { display: "none" },
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+          sx={{ padding: "16px" }}
+        >
+          <Typography variant="h6">Анализ расходов</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ padding: "0 16px 16px" }}>
+          <Box>
+            {expenseAnalysis.sortedCategories.length > 0 ? (
+              <>
+                <Typography variant="subtitle1" gutterBottom>
+                  Топ категорий расходов:
+                </Typography>
+                {expenseAnalysis.sortedCategories
+                  .slice(0, 3)
+                  .map((category) => (
+                    <Box key={category.category} sx={{ mb: 2 }}>
+                      <Typography variant="body2">
+                        {category.category}: {category.percentage.toFixed(1)}% (
+                        {formatCurrency(category.sum)})
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={category.percentage}
+                        sx={{
+                          height: 8,
+                          borderRadius: 5,
+                          backgroundColor: "rgba(255, 255, 255, 0.2)",
+                          "& .MuiLinearProgress-bar": {
+                            backgroundColor: getProgressColor(
+                              category.percentage
+                            ),
+                          },
+                        }}
+                      />
+                    </Box>
+                  ))}
+                <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
+                  Рекомендация:
+                </Typography>
+                <Typography variant="body2">
+                  {getRecommendation(
+                    expenseAnalysis.sortedCategories,
+                    expenseAnalysis.currentBalance
+                  )}
+                </Typography>
+              </>
+            ) : (
               <Typography variant="body2">
-                {getRecommendation(
-                  expenseAnalysis.sortedCategories,
-                  expenseAnalysis.currentBalance
-                )}
+                Недостаточно данных для анализа расходов.
               </Typography>
-            </>
-          ) : (
-            <Typography variant="body2">
-              Недостаточно данных для анализа расходов.
-            </Typography>
-          )}
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+            )}
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </Paper>
   );
 }
 
