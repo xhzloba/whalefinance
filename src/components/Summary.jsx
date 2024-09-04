@@ -82,7 +82,6 @@ function Summary({
       sx={{
         background:
           "linear-gradient(135deg, #002f4e 0%, #004d7a 50%, #008793 100%)",
-        borderRadius: "12px",
         color: "white",
         overflow: "hidden",
         borderRadius: {
