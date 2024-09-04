@@ -8,6 +8,7 @@ export default defineConfig({
   esbuild: {
     loader: "jsx",
   },
+  base: "/whalefinance/",
   build: {
     outDir: "build",
   },
