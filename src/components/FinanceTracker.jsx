@@ -56,6 +56,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     maxWidth: "1400px !important",
   },
+  [theme.breakpoints.down("sm")]: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
 }));
 
 export const paperStyle = {
@@ -128,7 +132,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
       if (!transaction.date) continue;
 
       const transactionDate = dayjs(transaction.date.toDate());
-      console.log("Обработка тра��закции:", {
+      console.log("Обработка тразакции:", {
         date: transactionDate.format("DD.MM.YYYY"),
         type: transaction.type,
         amount: transaction.amount,
@@ -405,7 +409,13 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                 handleMonthChange={handleMonthChange}
                 themeColor={themeColor}
               />
-              <Box sx={{ mt: 3 }}>
+              <Box
+                sx={{
+                  mt: { xs: 0, sm: 3 },
+                  position: { xs: "relative", sm: "static" },
+                  top: { sm: 0, xs: "-24px" },
+                }}
+              >
                 <LeftSidebar
                   balance={balance}
                   savingsBalance={savingsBalance}
@@ -413,8 +423,20 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                 />
               </Box>
             </Grid>
-            <Grid item xs={12} md={8} lg={6}>
-              <Grid container spacing={3}>
+            <Grid
+              item
+              xs={12}
+              md={8}
+              lg={6}
+              sx={{
+                "@media (max-width:600px)": {
+                  "& .MuiGrid-item": {
+                    paddingTop: "0px !important",
+                  },
+                },
+              }}
+            >
+              <Grid container spacing={{ xs: 6, sm: 3 }}>
                 <Grid item xs={12}>
                   <Summary
                     balance={balance}
@@ -450,13 +472,19 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                   <StyledAccordion
                     expanded={expanded.panel2}
                     onChange={handleChange("panel2")}
+                    sx={{
+                      borderRadius: {
+                        xs: "0px !important",
+                        sm: "8px !important",
+                      },
+                    }}
                   >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel2bh-content"
                       id="panel2bh-header"
                     >
-                      <Typography variant="h6">История операцй</Typography>
+                      <Typography variant="h6">История операций</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <TransactionList
@@ -470,7 +498,12 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} lg={3}>
+            <Grid
+              item
+              xs={12}
+              lg={3}
+              sx={{ paddingTop: { xs: "0 !important", sm: "24px !important" } }}
+            >
               <ExpenseAnalysis transactions={transactions} />
               <StyledAccordinWithLinearBackground
                 expanded={expanded.panel3}

@@ -26,7 +26,6 @@ function TabPanel({ children, value, index }) {
 }
 
 function Summary({
-  balance,
   lastIncomeDate,
   lastIncomeAmount,
   currentMonthExpenses,
@@ -86,6 +85,10 @@ function Summary({
         borderRadius: "12px",
         color: "white",
         overflow: "hidden",
+        borderRadius: {
+          xs: 0, // 0px на экранах размером с телефон и меньше
+          sm: 3, // стандартный borderRadius на экранах больше телефона
+        },
       }}
     >
       <Box>
@@ -95,12 +98,11 @@ function Summary({
           centered
           sx={{
             "& .MuiTab-root": { color: "rgba(255, 255, 255, 0.7)" },
-            "& .Mui-selected": { color: "white" },
+            "& .Mui-selected": { color: "white !important" }, // Добавлено !important
             "& .MuiTabs-indicator": { backgroundColor: "white" },
             background: "#004973",
             boxShadow: `
-    3px 1px 3px #007e8f,
-    inset 2px 5px 23px black
+    -1px 1px 3px #007e8f, inset 1px -38px 1px #0000008f
   `,
           }}
         >

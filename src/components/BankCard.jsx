@@ -164,7 +164,9 @@ const BankCard = ({
     <>
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
-          <CardFront>
+          <CardFront
+            sx={{ borderBottomRightRadius: "0", borderBottomLeftRadius: "0" }}
+          >
             <Box
               sx={{
                 position: "absolute",

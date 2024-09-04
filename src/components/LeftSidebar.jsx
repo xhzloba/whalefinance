@@ -139,7 +139,32 @@ function LeftSidebar({ balance, savingsBalance, themeColor }) {
   };
 
   return (
-    <Paper sx={{ ...paperStyle, p: 2, bgcolor: "white.100" }}>
+    <Paper
+      sx={{
+        ...paperStyle,
+        pl: 2,
+        pr: 2,
+        pb: {
+          sm: 2,
+          xs: 4,
+        },
+        pt: {
+          xs: 1,
+          sm: 2,
+        },
+        bgcolor: "white.100",
+        borderRadius: {
+          xs: 0, // 0px на экранах размером с телефон и меньше
+          sm: 3, // стандартный borderRadius на экранах больше телефона
+        },
+        borderTopRightRadius: {
+          xs: 25,
+        },
+        borderTopLeftRadius: {
+          xs: 25,
+        },
+      }}
+    >
       <AccountSection
         title="Кошелёк"
         balance={balance}
