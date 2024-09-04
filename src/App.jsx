@@ -7,7 +7,6 @@ import Auth from "./components/Auth";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import "./App.css";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
