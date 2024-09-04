@@ -8,6 +8,9 @@ export default defineConfig({
   esbuild: {
     loader: "jsx",
   },
+  build: {
+    outDir: "build",
+  },
   resolve: {
     alias: {
       "./runtimeConfig": "./runtimeConfig.browser",
