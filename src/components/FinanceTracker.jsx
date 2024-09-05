@@ -55,48 +55,6 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const RefreshControl = ({ onRefresh }) => {
-  const [isPulling, setIsPulling] = useState(false);
-  const [pullDistance, setPullDistance] = useState(0);
-  const threshold = 100;
-
-  const handlers = useSwipeable({
-    onSwiping: (eventData) => {
-      if (eventData.deltaY > 0 && window.scrollY === 0) {
-        setIsPulling(true);
-        setPullDistance(Math.min(eventData.deltaY, threshold));
-      }
-    },
-    onSwiped: (eventData) => {
-      if (isPulling && pullDistance >= threshold) {
-        onRefresh();
-      }
-      setIsPulling(false);
-      setPullDistance(0);
-    },
-  });
-
-  return (
-    <div
-      {...handlers}
-      style={{
-        height: `${pullDistance}px`,
-        transition: isPulling ? "none" : "height 0.2s ease",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f0f0f0",
-      }}
-    >
-      {isPulling && <div>Потяните для обновления страницы</div>}
-      {!isPulling && pullDistance >= threshold && (
-        <div>Отпустите для обновления страницы</div>
-      )}
-    </div>
-  );
-};
-
 const StyledContainer = styled(Container)(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     maxWidth: "1400px !important",
@@ -390,25 +348,8 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    console.log("Транзакции изменились. Новый баланс:", balance);
-    calculateProgressValue(transactions);
-    console.log("Баланс обновлен после изменения транзакций:", balance);
-  }, [transactions, balance, calculateProgressValue]);
-
-  const handleRefresh = useCallback(() => {
-    console.log("Обновление страницы...");
-    toast.info("Обновление страницы...", { autoClose: 1000 });
-
-    // Устанавливаем небольшую задержку перед обновлением страницы
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  }, []);
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <RefreshControl onRefresh={handleRefresh} />
       {!isMobile && (
         <AppBar position="static" sx={{ bgcolor: themeColor }}>
           <Toolbar>
