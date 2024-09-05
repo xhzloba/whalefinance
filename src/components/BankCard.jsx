@@ -6,6 +6,7 @@ import {
   Button,
   Modal,
   Paper,
+  Slide,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { NumericFormat } from "react-number-format";
@@ -295,29 +296,38 @@ const BankCard = ({
         </CardInner>
       </CardContainer>
 
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: 400, sm: 600 },
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: "16px",
-          }}
-        >
-          <Typography variant="h6" component="h2">
-            Добавить операцию
-          </Typography>
-          <IncomeExpenseForm
-            onAddTransaction={addTransaction}
-            onMonthChange={handleMonthChange}
-            handleClose={handleClose}
-          />
-        </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        sx={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+        }}
+      >
+        <Slide direction="up" in={open} mountOnEnter unmountOnExit>
+          <Box
+            sx={{
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              width: "100%",
+              maxWidth: 600,
+              borderTopLeftRadius: 16,
+              borderTopRightRadius: 16,
+            }}
+          >
+            <Typography variant="h6" component="h2" gutterBottom>
+              Добавить операцию
+            </Typography>
+            <IncomeExpenseForm
+              onAddTransaction={addTransaction}
+              onMonthChange={handleMonthChange}
+              handleClose={handleClose}
+            />
+          </Box>
+        </Slide>
       </Modal>
     </>
   );
