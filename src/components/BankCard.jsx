@@ -170,7 +170,7 @@ const BankCard = ({
   lastIncomeAmount,
   addTransaction,
   handleMonthChange,
-  resetProgress, // Добавьте этот проп
+  resetProgress,
 }) => {
   console.log("BankCard рендеринг:", {
     balance,
@@ -179,7 +179,6 @@ const BankCard = ({
     lastIncomeDate: lastIncomeDate
       ? dayjs(lastIncomeDate).format("DD.MM.YYYY")
       : "Нет",
-
     lastIncomeAmount,
   });
 
@@ -276,14 +275,14 @@ const BankCard = ({
                 }}
               />
               <Typography variant="body2" sx={{ mt: 1 }}>
-                {lastIncomeDate
+                {balance > 0 && lastIncomeDate
                   ? `Расходы с ${dayjs(lastIncomeDate).format(
                       "DD.MM.YYYY"
                     )}: ${currentMonthExpenses.toFixed(2)} ₽`
-                  : "нет доходов в текущем периоде"}
+                  : "Нет доходов в текущем периоде"}
               </Typography>
               <Typography variant="body2" sx={{ mt: 0.5 }}>
-                {lastIncomeDate
+                {balance > 0 && lastIncomeDate && lastIncomeAmount > 0
                   ? `${progressValue.toFixed(
                       1
                     )}% от дохода ${lastIncomeAmount.toFixed(2)} ₽`

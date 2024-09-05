@@ -118,6 +118,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const [lastTransaction, setLastTransaction] = useState(null);
   const [isPulsing, setIsPulsing] = useState(false);
   const [lastResetBalance, setLastResetBalance] = useState(null);
+  const [lastResetDate, setLastResetDate] = useState(null);
 
   const triggerPulse = useCallback(() => {
     setIsPulsing(true);
@@ -128,6 +129,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const calculateProgressValue = useCallback(
     (transactions) => {
       console.log("Все транзакции:", transactions);
+      console.log("Дата последнего сброса:", lastResetDate);
 
       if (!transactions || transactions.length === 0) {
         setProgressValue(0);
@@ -143,7 +145,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
       let totalExpenses = 0;
       let baseAmount = lastResetBalance || 0;
-      const lastResetDate = localStorage.getItem("lastResetDate");
+      let lastIncome = null;
 
       for (const transaction of sortedTransactions) {
         if (!transaction.date) continue;
@@ -164,6 +166,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
         if (transaction.type === "income") {
           baseAmount = parseFloat(transaction.amount);
           totalExpenses = 0;
+          lastIncome = transaction;
           console.log("Найден доход:", {
             date: transactionDate.format("DD.MM.YYYY"),
             amount: transaction.amount,
@@ -182,7 +185,9 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
         setProgressValue(Math.min(expensePercentage, 100));
         setCurrentMonthExpenses(totalExpenses);
-        setLastIncomeDate(lastResetDate ? new Date(lastResetDate) : null);
+        setLastIncomeDate(
+          lastIncome ? lastIncome.date.toDate() : lastResetDate
+        );
         setLastIncomeAmount(baseAmount);
 
         console.log("Базовая сумма:", baseAmount);
@@ -192,14 +197,18 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
           "Значение прогресс-бара:",
           Math.min(expensePercentage, 100)
         );
+        console.log(
+          "Последний доход/сброс:",
+          lastIncome ? lastIncome.date.toDate() : lastResetDate
+        );
       } else {
         setProgressValue(0);
         setCurrentMonthExpenses(0);
-        setLastIncomeDate(null);
+        setLastIncomeDate(lastResetDate);
         setLastIncomeAmount(0);
       }
     },
-    [lastResetBalance]
+    [lastResetBalance, lastResetDate]
   );
 
   useEffect(() => {
@@ -358,9 +367,10 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
     async (currentBalance) => {
       if (!auth.currentUser) return;
 
+      const resetDate = new Date();
       const resetData = {
         userId: auth.currentUser.uid,
-        resetDate: Timestamp.now(),
+        resetDate: Timestamp.fromDate(resetDate),
         resetBalance: currentBalance,
       };
 
@@ -372,7 +382,8 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
         );
 
         setLastResetBalance(currentBalance);
-        setLastIncomeDate(new Date());
+        setLastResetDate(resetDate);
+        setLastIncomeDate(resetDate);
         setLastIncomeAmount(currentBalance);
         setCurrentMonthExpenses(0);
         setProgressValue(0);
@@ -391,12 +402,12 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
     if (!auth.currentUser) return;
 
     try {
-      const resetDoc = await getDocs(
-        doc(db, "progressResets", auth.currentUser.uid)
-      );
-      if (resetDoc.exists()) {
-        const resetData = resetDoc.data();
+      const resetDocRef = doc(db, "progressResets", auth.currentUser.uid);
+      const resetDocSnap = await getDocs(resetDocRef);
+      if (resetDocSnap.exists()) {
+        const resetData = resetDocSnap.data();
         setLastResetBalance(resetData.resetBalance);
+        setLastResetDate(resetData.resetDate.toDate());
         setLastIncomeDate(resetData.resetDate.toDate());
         setLastIncomeAmount(resetData.resetBalance);
       }
