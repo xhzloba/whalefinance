@@ -99,10 +99,11 @@ function Summary({
             "& .MuiTab-root": { color: "rgba(255, 255, 255, 0.7)" },
             "& .Mui-selected": { color: "white !important" }, // Добавлено !important
             "& .MuiTabs-indicator": { backgroundColor: "white" },
-            background: "#004973",
+            // background: "#004973",
             boxShadow: `
     -1px 1px 3px #007e8f, inset 1px -38px 1px #0000008f
   `,
+            paddingTop: "12px !important",
           }}
         >
           <Tab icon={<TrendingUpIcon />} label="Доходы" />

@@ -80,15 +80,17 @@ function adjustColor(color, amount) {
   );
 }
 
-const CardNumber = styled(Typography)({
-  fontSize: "1.2rem",
-  letterSpacing: "0.2em",
-});
-
-const CardBalance = styled(Typography)({
-  fontSize: "1.5rem",
+const CardBalance = styled(Typography)(({ theme }) => ({
+  filter: "drop-shadow(0px 10px 15px black)",
   fontWeight: "bold",
-});
+  fontSize: "1.5rem",
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "3rem",
+  },
+  [`@media (max-width:398px)`]: {
+    fontSize: "1.3rem",
+  },
+}));
 
 const MagneticStrip = styled(Box)({
   width: "100%",
@@ -242,12 +244,15 @@ const BankCard = ({
                 {lastIncomeDate
                   ? `Расходы с ${dayjs(lastIncomeDate).format(
                       "DD.MM.YYYY"
-                    )}: ${currentMonthExpenses.toFixed(
-                      2
-                    )} ₽ (${progressValue.toFixed(
-                      1
-                    )}% от дохода ${lastIncomeAmount.toFixed(2)} ₽)`
+                    )}: ${currentMonthExpenses.toFixed(2)} ₽`
                   : "Нет доходов в текущем периоде"}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 0.5 }}>
+                {lastIncomeDate
+                  ? `${progressValue.toFixed(
+                      1
+                    )}% от дохода ${lastIncomeAmount.toFixed(2)} ₽`
+                  : ""}
               </Typography>
             </Box>
             <Box>

@@ -77,16 +77,34 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #bfe3ff; /* Цвет фона, соответствующий BankCard */
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+  body {
+    background: linear-gradient(to bottom, #e8f1f8 50%, #ffffff 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 }
 
 .MuiAccordionSummary-content.Mui-expanded {
   margin: 0 !important;
+}
+
+/* Скрываем скроллбар для Chrome, Safari и Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Скрываем скроллбар для IE, Edge и Firefox */
+body {
+  -ms-overflow-style: none; /* IE и Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Убедимся, что содержимое может прокручиваться */
+html,
+body {
+  overflow-y: auto;
+  height: 100%;
 }
