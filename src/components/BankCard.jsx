@@ -59,6 +59,9 @@ const CardInner = styled(Box)(({ flipped }) => ({
 const CardSide = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "100%",
+  [theme.breakpoints.down("sm")]: {
+    height: "400px",
+  },
   position: "absolute",
   backfaceVisibility: "hidden",
   borderRadius: "10px",
@@ -75,7 +78,7 @@ const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
   borderRadius: 0, // Убираем скругление углов
-  paddingTop: "calc(env(safe-area-inset-top) + 16px)",
+  paddingTop: "calc(env(safe-area-inset-top) + 25px)",
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
@@ -105,9 +108,11 @@ const CardBalance = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: "3rem",
   },
-  [`@media (max-width:398px)`]: {
+  [`@media (max-width:391px)`]: {
     fontSize: "1.3rem",
   },
+  position: "relative",
+  zIndex: 3,
 }));
 
 const MagneticStrip = styled(Box)({
@@ -215,7 +220,7 @@ const BankCard = ({
                   handleOpen();
                 }}
                 sx={{
-                  top: "calc(env(safe-area-inset-top) + 16px)",
+                  top: "calc(env(safe-area-inset-top) + 12px)",
                   right: "10px",
                   background: "transparent",
                   fontSize: "30px",

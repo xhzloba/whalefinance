@@ -169,6 +169,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
         position: "relative",
         overflow: "hidden",
         zIndex: 2,
+        marginTop: "calc(env(safe-area-inset-top) + 12px)",
         "&::before": isPulsing
           ? {
               content: '""',
