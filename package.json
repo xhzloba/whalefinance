@@ -30,6 +30,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-number-format": "^5.4.1",
+    "react-pull-to-refresh": "^2.0.1",
+    "react-swipeable": "^7.0.1",
     "react-toastify": "^10.0.5",
     "recharts": "^2.12.7",
     "socket.io-client": "^4.7.5",
