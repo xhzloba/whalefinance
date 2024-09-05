@@ -15,7 +15,8 @@ body {
   padding: 0;
   min-height: 100vh;
   font-family: "SB Sans Display", sans-serif;
-  background-image: url("../public/gradient.svg");  background-attachment: fixed;
+  background-image: url("../public/gradient.svg");
+  background-attachment: fixed;
   background-size: cover;
 }
 
@@ -79,12 +80,19 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
+
+    background-image: url("../public/gradient.svg");
+    background-attachment: fixed;
+    background-size: cover;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color: #ffffff;
+    background-image: url("../public/gradient.svg");
+    background-attachment: fixed;
+    background-size: cover;
   }
 }
 
