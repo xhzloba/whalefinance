@@ -8,15 +8,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: "SB Sans Display", sans-serif;
   background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
+  background-attachment: fixed;
 }
 
 #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  background: #f5f5f5 !important;
+  min-height: 100vh;
+  padding-top: env(safe-area-inset-top);
 }
 
 * {
@@ -28,10 +33,6 @@
 html,
 body {
   background: #1976d2;
-}
-
-body {
-  font-family: "SB Sans Display", sans-serif;
 }
 
 a {
@@ -78,85 +79,33 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #ffffff;
+  }
+}
+
+/* Удалите или закомментируйте следующий блок, так как он больше не нужен */
+/*
+@supports (padding-top: env(safe-area-inset-top)) {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top);
     background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
+    z-index: 1000;
   }
 
-  body {
-    background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color: #ffffff;
-    }
-
-    body {
-      background: linear-gradient(to bottom, #242424 50%, #1a1a1a 50%);
-      background-attachment: fixed;
-    }
-
-    /* Аналогичные стили для учета "челки" в темной теме */
-    @supports (padding-top: env(safe-area-inset-top)) {
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: env(safe-area-inset-top);
-        background: linear-gradient(
-          45deg,
-          #051937 0%,
-          #004d7a 50%,
-          #008793 100%
-        );
-        z-index: 1000;
-      }
-
-      .top-content {
-        padding-top: calc(env(safe-area-inset-top) + 20px);
-      }
-    }
-  }
-
-  @supports (padding-top: env(safe-area-inset-top)) {
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: env(safe-area-inset-top);
-      background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
-      z-index: 1000;
-    }
-
-    .top-content {
-      padding-top: calc(env(safe-area-inset-top) + 20px);
-    }
+  .top-content {
+    padding-top: calc(env(safe-area-inset-top) + 20px);
   }
 }
+*/
 
-.MuiAccordionSummary-content.Mui-expanded {
-  margin: 0 !important;
-}
-
-/* Скрываем скроллбар для Chrome, Safari и Opera */
-body::-webkit-scrollbar {
-  display: none;
-}
-
-/* Скрываем скроллбар для IE, Edge и Firefox */
-body {
-  -ms-overflow-style: none; /* IE и Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* Убедимся, что содержимое может прокручиваться */
-html,
-body {
-  overflow-y: auto;
-  height: 100%;
-}
+/* Остальные стили остаются без изменений */
