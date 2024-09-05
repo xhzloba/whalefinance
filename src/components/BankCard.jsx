@@ -30,7 +30,7 @@ const CardContainer = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   [theme.breakpoints.down("sm")]: {
     marginTop: "calc(-1 * env(safe-area-inset-top))",
-    paddingTop: "calc(env(safe-area-inset-top) + 16px)",
+    paddingTop: "calc(env(safe-area-inset-top))",
   },
   position: "relative",
   zIndex: 1,
@@ -75,6 +75,7 @@ const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
   borderRadius: 0, // Убираем скругление углов
+  paddingTop: "calc(env(safe-area-inset-top) + 36px)",
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
