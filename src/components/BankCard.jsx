@@ -13,6 +13,16 @@ import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
 import logoImage from "../assets/whale-logo.png";
 
+const SafeAreaContainer = styled(Box)({
+  paddingTop: "env(safe-area-inset-top)",
+  backgroundColor: "transparent",
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  zIndex: 1000,
+});
+
 const CardContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   aspectRatio: "1.586 / 1",
@@ -22,6 +32,8 @@ const CardContainer = styled(Box)(({ theme }) => ({
     marginTop: "calc(-1 * env(safe-area-inset-top))",
     paddingTop: "env(safe-area-inset-top)",
   },
+  position: "relative",
+  zIndex: 1,
 }));
 
 const LogoContainer = styled(Box)({
@@ -181,6 +193,7 @@ const BankCard = ({
 
   return (
     <>
+      <SafeAreaContainer />
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
           <CardFront>
