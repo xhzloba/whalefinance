@@ -15,8 +15,8 @@ body {
   padding: 0;
   min-height: 100vh;
   font-family: "SB Sans Display", sans-serif;
-  background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
-  background-attachment: fixed;
+  background-image: url("../public/gradient.svg");  background-attachment: fixed;
+  background-size: cover;
 }
 
 #root {
