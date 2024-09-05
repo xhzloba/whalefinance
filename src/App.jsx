@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import FinanceTracker from "./components/FinanceTracker";
 import Auth from "./components/Auth";
+import SplashScreen from "./components/SplashScreen";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import "./App.css";
@@ -12,6 +13,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [themeColor, setThemeColor] = useState("#1976d2");
+  const [showSplash, setShowSplash] = useState(true);
   const auth = getAuth();
 
   useEffect(() => {
@@ -45,6 +47,19 @@ const App = () => {
     const nextIndex = (currentIndex + 1) % colors.length;
     setThemeColor(colors[nextIndex]);
   };
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SplashScreen onFinish={handleSplashFinish} />
+      </ThemeProvider>
+    );
+  }
 
   if (isLoading) {
     return (

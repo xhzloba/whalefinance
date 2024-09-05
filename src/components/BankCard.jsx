@@ -177,6 +177,7 @@ const BankCard = ({
     lastIncomeDate: lastIncomeDate
       ? dayjs(lastIncomeDate).format("DD.MM.YYYY")
       : "Нет",
+
     lastIncomeAmount,
   });
 
@@ -263,7 +264,7 @@ const BankCard = ({
                   ? `Расходы с ${dayjs(lastIncomeDate).format(
                       "DD.MM.YYYY"
                     )}: ${currentMonthExpenses.toFixed(2)} ₽`
-                  : "ет доходов в текущем периоде"}
+                  : "нет доходов в текущем периоде"}
               </Typography>
               <Typography variant="body2" sx={{ mt: 0.5 }}>
                 {lastIncomeDate
