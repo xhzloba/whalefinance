@@ -30,7 +30,7 @@ const CardContainer = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   [theme.breakpoints.down("sm")]: {
     marginTop: "calc(-1 * env(safe-area-inset-top))",
-    paddingTop: "env(safe-area-inset-top)",
+    paddingTop: "calc(env(safe-area-inset-top) + 16px)",
   },
   position: "relative",
   zIndex: 1,
