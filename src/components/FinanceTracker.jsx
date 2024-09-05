@@ -38,6 +38,7 @@ import CategoryLimits from "./CategoryLimits";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import PullToRefresh from "react-pull-to-refresh";
 
 import { db } from "../firebaseConfig";
 import {
@@ -353,236 +354,259 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
     console.log("Баланс обновлен после изменения транзакций:", balance);
   }, [transactions, balance, calculateProgressValue]);
 
+  const handleRefresh = useCallback(
+    async (resolve) => {
+      console.log("Refreshing data...");
+      try {
+        await fetchTransactions();
+        console.log("Data refreshed successfully");
+        toast.success("Данные обновлены");
+      } catch (error) {
+        console.error("Error refreshing data:", error);
+        toast.error("Ошибка при обновлении данных");
+      } finally {
+        resolve();
+      }
+    },
+    [fetchTransactions]
+  );
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      {!isMobile && (
-        <AppBar position="static" sx={{ bgcolor: themeColor }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Whale Finance
-            </Typography>
-            <IconButton color="inherit" onClick={onColorChange}>
-              <ColorLensIcon />
-            </IconButton>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isDeleteEnabled}
-                  onChange={handleDeleteSwitch}
-                  color="secondary"
-                />
-              }
-            />
-            {isDeleteEnabled && (
-              <Button color="inherit" onClick={handleDeleteAllTransactions}>
-                Удалить все
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
-      )}
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Введите пароль</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Для удаления все�� транзакций ведите пароль.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Пароль"
-            type="password"
-            fullWidth
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Отмена
-          </Button>
-          <Button onClick={handleDeleteAllTransactions} color="primary">
-            Удалить
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
-        <StyledContainer maxWidth="lg" sx={{ mt: 3, mb: 2 }}>
-          <Grid container spacing={3}>
-            <Grid
-              item
-              xs={12}
-              md={4}
-              lg={3}
-              sx={{
-                minWidth: { md: 320 },
-                paddingTop: { xs: "0px !important", sm: "24px !important" },
-              }}
-            >
-              <BankCard
-                balance={balance}
-                progressValue={progressValue}
-                currentMonthExpenses={currentMonthExpenses}
-                lastIncomeDate={lastIncomeDate}
-                lastIncomeAmount={lastIncomeAmount}
-                addTransaction={addTransaction}
-                handleMonthChange={handleMonthChange}
-                themeColor={themeColor}
+    <PullToRefresh onRefresh={handleRefresh} pullDownThreshold={200}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        {!isMobile && (
+          <AppBar position="static" sx={{ bgcolor: themeColor }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Whale Finance
+              </Typography>
+              <IconButton color="inherit" onClick={onColorChange}>
+                <ColorLensIcon />
+              </IconButton>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isDeleteEnabled}
+                    onChange={handleDeleteSwitch}
+                    color="secondary"
+                  />
+                }
               />
-              <Box
+              {isDeleteEnabled && (
+                <Button color="inherit" onClick={handleDeleteAllTransactions}>
+                  Удалить все
+                </Button>
+              )}
+            </Toolbar>
+          </AppBar>
+        )}
+        <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+          <DialogTitle>Введите пароль</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Для удаления все транзакций ведите пароль.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Пароль"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              Отмена
+            </Button>
+            <Button onClick={handleDeleteAllTransactions} color="primary">
+              Удалить
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
+          <StyledContainer maxWidth="lg" sx={{ mt: 3, mb: 2 }}>
+            <Grid container spacing={3}>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                lg={3}
                 sx={{
-                  mt: { xs: 0, sm: 3 },
-                  position: { xs: "relative", sm: "static" },
-                  top: { sm: 0, xs: "-24px" },
+                  minWidth: { md: 320 },
+                  paddingTop: { xs: "0px !important", sm: "24px !important" },
                 }}
               >
-                <LeftSidebar
+                <BankCard
                   balance={balance}
-                  savingsBalance={savingsBalance}
+                  progressValue={progressValue}
+                  currentMonthExpenses={currentMonthExpenses}
+                  lastIncomeDate={lastIncomeDate}
+                  lastIncomeAmount={lastIncomeAmount}
+                  addTransaction={addTransaction}
+                  handleMonthChange={handleMonthChange}
                   themeColor={themeColor}
-                  lastTransaction={lastTransaction}
-                  isPulsing={isPulsing}
                 />
-              </Box>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={8}
-              lg={6}
-              sx={{
-                "@media (max-width:600px)": {
-                  "& .MuiGrid-item": {
-                    paddingTop: "0px !important",
-                  },
-                },
-              }}
-            >
-              <Grid container spacing={{ xs: 6, sm: 3 }}>
-                <Grid item xs={12}>
-                  <Summary
+                <Box
+                  sx={{
+                    mt: { xs: 0, sm: 3 },
+                    position: { xs: "relative", sm: "static" },
+                    top: { sm: 0, xs: "-24px" },
+                  }}
+                >
+                  <LeftSidebar
                     balance={balance}
-                    lastIncomeDate={lastIncomeDate}
-                    lastIncomeAmount={lastIncomeAmount}
-                    currentMonthExpenses={currentMonthExpenses}
-                    progressValue={progressValue}
-                    transactions={transactions}
+                    savingsBalance={savingsBalance}
+                    themeColor={themeColor}
+                    lastTransaction={lastTransaction}
+                    isPulsing={isPulsing}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <StyledAccordion
-                    expanded={expanded.panel1}
-                    onChange={handleChange("panel1")}
-                    sx={{ display: { xs: "none", sm: "block" } }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1bh-content"
-                      id="panel1bh-header"
+                </Box>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={8}
+                lg={6}
+                sx={{
+                  "@media (max-width:600px)": {
+                    "& .MuiGrid-item": {
+                      paddingTop: "0px !important",
+                    },
+                  },
+                }}
+              >
+                <Grid container spacing={{ xs: 6, sm: 3 }}>
+                  <Grid item xs={12}>
+                    <Summary
+                      balance={balance}
+                      lastIncomeDate={lastIncomeDate}
+                      lastIncomeAmount={lastIncomeAmount}
+                      currentMonthExpenses={currentMonthExpenses}
+                      progressValue={progressValue}
+                      transactions={transactions}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <StyledAccordion
+                      expanded={expanded.panel1}
+                      onChange={handleChange("panel1")}
+                      sx={{ display: { xs: "none", sm: "block" } }}
                     >
-                      <Typography variant="h6">Добавить операцию</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <IncomeExpenseForm
-                        onAddTransaction={addTransaction}
-                        onMonthChange={handleMonthChange}
-                      />
-                    </AccordionDetails>
-                  </StyledAccordion>
-                </Grid>
-                <Grid item xs={12}>
-                  <StyledAccordion
-                    expanded={expanded.panel2}
-                    onChange={handleChange("panel2")}
-                    sx={{
-                      borderRadius: {
-                        xs: "0px !important",
-                        sm: "8px !important",
-                      },
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel2bh-content"
-                      id="panel2bh-header"
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                      >
+                        <Typography variant="h6">Добавить операцию</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <IncomeExpenseForm
+                          onAddTransaction={addTransaction}
+                          onMonthChange={handleMonthChange}
+                        />
+                      </AccordionDetails>
+                    </StyledAccordion>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <StyledAccordion
+                      expanded={expanded.panel2}
+                      onChange={handleChange("panel2")}
+                      sx={{
+                        borderRadius: {
+                          xs: "0px !important",
+                          sm: "8px !important",
+                        },
+                      }}
                     >
-                      <Typography variant="h6">История операций</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <TransactionList
-                        transactions={transactions}
-                        onDeleteTransaction={deleteTransaction}
-                        selectedMonth={selectedMonth}
-                        onMonthChange={handleMonthChange}
-                      />
-                    </AccordionDetails>
-                  </StyledAccordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel2bh-content"
+                        id="panel2bh-header"
+                      >
+                        <Typography variant="h6">История операций</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <TransactionList
+                          transactions={transactions}
+                          onDeleteTransaction={deleteTransaction}
+                          selectedMonth={selectedMonth}
+                          onMonthChange={handleMonthChange}
+                        />
+                      </AccordionDetails>
+                    </StyledAccordion>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              lg={3}
-              sx={{ paddingTop: { xs: "0 !important", sm: "24px !important" } }}
-            >
-              <ExpenseAnalysis transactions={transactions} />
-              <StyledAccordinWithLinearBackground
-                expanded={expanded.panel3}
-                onChange={handleChange("panel3")}
+              <Grid
+                item
+                xs={12}
+                lg={3}
+                sx={{
+                  paddingTop: { xs: "0 !important", sm: "24px !important" },
+                }}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
-                  aria-controls="panel3bh-content"
-                  id="panel3bh-header"
+                <ExpenseAnalysis transactions={transactions} />
+                <StyledAccordinWithLinearBackground
+                  expanded={expanded.panel3}
+                  onChange={handleChange("panel3")}
                 >
-                  <Typography sx={{ color: "white" }} variant="h6">
-                    Лимиты расходов
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <CategoryLimits transactions={transactions} />
-                </AccordionDetails>
-              </StyledAccordinWithLinearBackground>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                    aria-controls="panel3bh-content"
+                    id="panel3bh-header"
+                  >
+                    <Typography sx={{ color: "white" }} variant="h6">
+                      Лимиты расходов
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <CategoryLimits transactions={transactions} />
+                  </AccordionDetails>
+                </StyledAccordinWithLinearBackground>
+              </Grid>
             </Grid>
-          </Grid>
-        </StyledContainer>
-      </Box>
-
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: 400, sm: 300 },
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography variant="h6" component="h2">
-            Добавить операцию
-          </Typography>
-          <IncomeExpenseForm
-            onAddTransaction={addTransaction}
-            onMonthChange={handleMonthChange}
-            handleClose={handleClose}
-          />
+          </StyledContainer>
         </Box>
-      </Modal>
 
-      <ToastContainer />
-    </Box>
+        <Modal open={open} onClose={handleClose}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: { xs: 400, sm: 300 },
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Typography variant="h6" component="h2">
+              Добавить операцию
+            </Typography>
+            <IncomeExpenseForm
+              onAddTransaction={addTransaction}
+              onMonthChange={handleMonthChange}
+              handleClose={handleClose}
+            />
+          </Box>
+        </Modal>
+
+        <ToastContainer />
+      </Box>
+    </PullToRefresh>
   );
 };
 

@@ -75,7 +75,7 @@ const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
   borderRadius: 0, // Убираем скругление углов
-  paddingTop: "calc(env(safe-area-inset-top) + 66px)",
+  paddingTop: "calc(env(safe-area-inset-top) + 16px)",
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
@@ -215,7 +215,7 @@ const BankCard = ({
                   handleOpen();
                 }}
                 sx={{
-                  top: "10px",
+                  top: "calc(env(safe-area-inset-top) + 16px)",
                   right: "10px",
                   background: "transparent",
                   fontSize: "30px",
