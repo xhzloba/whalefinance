@@ -5,9 +5,10 @@ import {
   LinearProgress,
   Button,
   Modal,
-  Paper,
   Slide,
+  IconButton,
 } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { styled } from "@mui/system";
 import { NumericFormat } from "react-number-format";
 import IncomeExpenseForm from "./IncomeExpenseForm";
@@ -169,6 +170,7 @@ const BankCard = ({
   lastIncomeAmount,
   addTransaction,
   handleMonthChange,
+  resetProgress, // Добавьте этот проп
 }) => {
   console.log("BankCard рендеринг:", {
     balance,
@@ -214,6 +216,20 @@ const BankCard = ({
                 gap: 1,
               }}
             >
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetProgress(balance);
+                }}
+                sx={{
+                  top: "calc(env(safe-area-inset-top) + 12px)",
+                  right: "50px",
+                  background: "transparent",
+                  color: "white",
+                }}
+              >
+                <RestartAltIcon />
+              </IconButton>
               <Button
                 variant="contained"
                 color="primary"

@@ -52,6 +52,8 @@ import {
   onSnapshot,
   writeBatch,
   Timestamp,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -116,52 +118,57 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const [lastIncomeAmount, setLastIncomeAmount] = useState(0);
   const [lastTransaction, setLastTransaction] = useState(null);
   const [isPulsing, setIsPulsing] = useState(false);
-
+  const [lastResetBalance, setLastResetBalance] = useState(null); // Новый флаг
+  const [isResetting, setIsResetting] = useState(false); // Новый флаг
   const triggerPulse = useCallback(() => {
     setIsPulsing(true);
     // Увеличим время анимации до 2 секунд
     setTimeout(() => setIsPulsing(false), 2000);
   }, []);
 
-  const calculateProgressValue = useCallback((transactions) => {
-    console.log("Все транзакции:", transactions);
+  const calculateProgressValue = useCallback(
+    (transactions) => {
+      console.log("Все транзакции:", transactions);
 
-    if (!transactions || transactions.length === 0) {
-      setProgressValue(0);
-      setCurrentMonthExpenses(0);
-      setLastIncomeDate(null);
-      setLastIncomeAmount(0);
-      return;
-    }
+      if (!transactions || transactions.length === 0) {
+        setProgressValue(0);
+        setCurrentMonthExpenses(0);
+        setLastIncomeDate(null);
+        setLastIncomeAmount(0);
+        return;
+      }
 
-    const sortedTransactions = [...transactions].sort((a, b) =>
-      dayjs(a.date.toDate()).diff(dayjs(b.date.toDate()))
-    );
+      const sortedTransactions = [...transactions].sort((a, b) =>
+        dayjs(a.date.toDate()).diff(dayjs(b.date.toDate()))
+      );
 
-    let lastIncome = null;
-    let totalExpenses = 0;
-    let foundLastIncome = false;
+      let totalExpenses = 0;
+      let baseAmount = lastResetBalance || 0;
 
-    for (const transaction of sortedTransactions) {
-      if (!transaction.date) continue;
+      for (const transaction of sortedTransactions) {
+        if (!transaction.date) continue;
 
-      const transactionDate = dayjs(transaction.date.toDate());
-      console.log("Обработка тразакции:", {
-        date: transactionDate.format("DD.MM.YYYY"),
-        type: transaction.type,
-        amount: transaction.amount,
-      });
+        const transactionDate = dayjs(transaction.date.toDate());
 
-      if (transaction.type === "income") {
-        lastIncome = transaction;
-        foundLastIncome = true;
-        totalExpenses = 0;
-        console.log("Найден доход:", {
+        // Пропускаем транзакции, которые произошли до последнего сброса
+        if (lastIncomeDate && transactionDate.isBefore(dayjs(lastIncomeDate))) {
+          continue;
+        }
+
+        console.log("Обработка транзакции:", {
           date: transactionDate.format("DD.MM.YYYY"),
+          type: transaction.type,
           amount: transaction.amount,
         });
-      } else if (transaction.type === "expense") {
-        if (foundLastIncome) {
+
+        if (transaction.type === "income") {
+          baseAmount = parseFloat(transaction.amount);
+          totalExpenses = 0;
+          console.log("Найден доход:", {
+            date: transactionDate.format("DD.MM.YYYY"),
+            amount: transaction.amount,
+          });
+        } else if (transaction.type === "expense") {
           totalExpenses += parseFloat(transaction.amount);
           console.log("Добавлен расход:", {
             date: transactionDate.format("DD.MM.YYYY"),
@@ -169,38 +176,52 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
           });
         }
       }
-    }
 
-    if (lastIncome) {
-      const lastIncomeAmount = parseFloat(lastIncome.amount);
-      const expensePercentage = (totalExpenses / lastIncomeAmount) * 100;
+      if (baseAmount > 0) {
+        const expensePercentage = (totalExpenses / baseAmount) * 100;
 
-      setProgressValue(Math.min(expensePercentage, 100));
-      setCurrentMonthExpenses(totalExpenses);
-      setLastIncomeDate(lastIncome.date.toDate());
-      setLastIncomeAmount(lastIncomeAmount);
+        // Обновляем состояние только если значения изменились
+        setProgressValue((prev) =>
+          prev !== Math.min(expensePercentage, 100)
+            ? Math.min(expensePercentage, 100)
+            : prev
+        );
+        setCurrentMonthExpenses((prev) =>
+          prev !== totalExpenses ? totalExpenses : prev
+        );
+        setLastIncomeDate((prev) =>
+          prev !== (lastIncomeDate ? new Date(lastIncomeDate) : null)
+            ? lastIncomeDate
+              ? new Date(lastIncomeDate)
+              : null
+            : prev
+        );
+        setLastIncomeAmount((prev) =>
+          prev !== baseAmount ? baseAmount : prev
+        );
 
-      console.log(
-        "Последний доход:",
-        dayjs(lastIncome.date.toDate()).format("DD.MM.YYYY")
-      );
-      console.log("Сумма последнего дохода:", lastIncomeAmount);
-      console.log("Расходы с последнего дохода:", totalExpenses);
-      console.log("Процент расходов:", expensePercentage);
-      console.log("Значение прогресс-бара:", Math.min(expensePercentage, 100));
-    } else {
-      setProgressValue(0);
-      setCurrentMonthExpenses(0);
-      setLastIncomeDate(null);
-      setLastIncomeAmount(0);
-    }
-  }, []);
+        console.log("Базовая сумма:", baseAmount);
+        console.log("Расходы с последнего дохода/сброса:", totalExpenses);
+        console.log("Процент расходов:", expensePercentage);
+        console.log(
+          "Значение прогресс-бара:",
+          Math.min(expensePercentage, 100)
+        );
+      } else {
+        setProgressValue(0);
+        setCurrentMonthExpenses(0);
+        setLastIncomeDate(null);
+        setLastIncomeAmount(0);
+      }
+    },
+    [lastResetBalance, lastIncomeDate]
+  );
 
   useEffect(() => {
     if (transactions && transactions.length > 0) {
       calculateProgressValue(transactions);
     }
-  }, [transactions, calculateProgressValue]);
+  }, [transactions, calculateProgressValue, lastResetBalance, lastIncomeDate]);
 
   const fetchTransactions = useCallback(async () => {
     if (!auth.currentUser) return;
@@ -228,6 +249,8 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
       calculateProgressValue(fetchedTransactions);
     } catch (error) {
       console.error("Error fetching transactions:", error);
+    } finally {
+      setIsResetting(false); // Сбрасываем флаг после завершения
     }
   }, [auth, calculateProgressValue]);
 
@@ -298,7 +321,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
       setBalance(newBalance);
 
       calculateProgressValue(updatedTransactions);
-      console.log("Транзакция удалена, баланс обновлен:", newBalance);
+      console.log("Транзакция удалена, баланс обнолен:", newBalance);
     } catch (error) {
       console.error("Error deleting transaction:", error);
     }
@@ -347,6 +370,66 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const resetProgress = useCallback(
+    async (currentBalance) => {
+      if (!auth.currentUser) return;
+
+      const resetData = {
+        userId: auth.currentUser.uid,
+        resetDate: Timestamp.now(),
+        resetBalance: currentBalance,
+      };
+
+      try {
+        // Сохраняем данные о сбросе в Firestore
+        await setDoc(
+          doc(db, "progressResets", auth.currentUser.uid),
+          resetData
+        );
+
+        // Обновляем состояние
+        setLastResetBalance(currentBalance);
+        setLastIncomeDate(new Date());
+        setLastIncomeAmount(currentBalance);
+        setCurrentMonthExpenses(0);
+        setProgressValue(0);
+        setLastTransaction(Date.now());
+
+        console.log("Прогресс сброшен и сохранен в Firebase");
+
+        // Вызов fetchTransactions для обновления состояния
+        fetchTransactions();
+      } catch (error) {
+        console.error("Ошибка при сбросе прогресса:", error);
+      }
+    },
+    [auth, fetchTransactions]
+  );
+
+  const fetchResetData = useCallback(async () => {
+    if (!auth.currentUser) return;
+
+    try {
+      const resetDoc = await getDoc(
+        doc(db, "progressResets", auth.currentUser.uid)
+      );
+      if (resetDoc.exists()) {
+        const resetData = resetDoc.data();
+        setLastResetBalance(resetData.resetBalance);
+        setLastIncomeDate(resetData.resetDate.toDate());
+        setLastIncomeAmount(resetData.resetBalance);
+      }
+    } catch (error) {
+      console.error("Ошибка при получении данных о сбросе:", error);
+    }
+  }, [auth]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchResetData();
+    }
+  }, [isAuthenticated, fetchResetData]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
@@ -431,6 +514,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                 addTransaction={addTransaction}
                 handleMonthChange={handleMonthChange}
                 themeColor={themeColor}
+                resetProgress={resetProgress}
               />
               <Box
                 sx={{
