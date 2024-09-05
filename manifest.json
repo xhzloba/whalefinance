@@ -1,6 +1,6 @@
 {
   "name": "Whale Finance",
-  "short_name": "Whale Finance",
+  "short_name": "WF",
   "icons": [
     {
       "src": "/favicon-192x192.png",
@@ -13,12 +13,12 @@
       "type": "image/png"
     },
     {
-      "src": "/favicon-180x180.png",
-      "sizes": "180x180",
+      "src": "/apple-touch-icon-120x120",
+      "sizes": "120x120",
       "type": "image/png"
     }
   ],
-  "theme_color": "#004d7a",
-  "background_color": "#004d7a",
+  "theme_color": "transparent",
+  "background_color": "transparent",
   "display": "standalone"
 }
