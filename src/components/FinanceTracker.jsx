@@ -357,7 +357,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const handleRefresh = useCallback((resolve) => {
     console.log("Refreshing page...");
     // Показываем уведомление о начале обновления
-    toast.info("Обновление страницы...", { autoClose: 2000 });
+    toast.info("Обновление страницы...", { autoClose: 1000 });
 
     // Устанавливаем небольшую задержку перед обновлением страницы
     setTimeout(() => {
