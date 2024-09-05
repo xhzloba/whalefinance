@@ -8,6 +8,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
 }
 
 #root {
@@ -77,13 +78,29 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #bfe3ff; /* Цвет фона, соответствующий BankCard */
+    background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
   }
 
   body {
-    background: linear-gradient(to bottom, #e8f1f8 50%, #ffffff 50%);
+    background: linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%);
     background-attachment: fixed;
     min-height: 100vh;
+  }
+
+  @supports (padding-top: env(safe-area-inset-top)) {
+    body {
+      padding-top: env(safe-area-inset-top);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+    }
+
+    /* Дополнительные стили для верхней части экрана */
+    .top-content {
+      padding-top: calc(
+        env(safe-area-inset-top) + 20px
+      ); /* Добавляем дополнительный отступ */
+    }
   }
 }
 
