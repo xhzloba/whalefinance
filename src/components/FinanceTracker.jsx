@@ -21,6 +21,8 @@ import {
   FormControlLabel,
   TextField,
   Modal,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -89,12 +91,15 @@ const StyledAccordinWithLinearBackground = styled(StyledAccordion)(
 );
 
 const FinanceTracker = ({ themeColor, onColorChange }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [transactions, setTransactions] = useState([]);
-  const [savingsBalance, setSavingsBalance] = useState(133000); // Добавляем состояние для накопительного счета
+  const [savingsBalance, setSavingsBalance] = useState(133000);
   const [expanded, setExpanded] = useState({
     panel1: true,
     panel2: true,
-    panel3: true, // Добавляем новое состояние для третьего аккордеона
+    panel3: true,
   });
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
@@ -108,6 +113,14 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
   const [balance, setBalance] = useState(0);
   const [lastIncomeDate, setLastIncomeDate] = useState(null);
   const [lastIncomeAmount, setLastIncomeAmount] = useState(0);
+  const [lastTransaction, setLastTransaction] = useState(null);
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  const triggerPulse = useCallback(() => {
+    setIsPulsing(true);
+    // Увеличим время анимации до 2 секунд
+    setTimeout(() => setIsPulsing(false), 2000);
+  }, []);
 
   const calculateProgressValue = useCallback((transactions) => {
     console.log("Все транзакции:", transactions);
@@ -141,7 +154,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
       if (transaction.type === "income") {
         lastIncome = transaction;
         foundLastIncome = true;
-        totalExpenses = 0; // Сбрасываем расходы при нахождении нового дохода
+        totalExpenses = 0;
         console.log("Найден доход:", {
           date: transactionDate.format("DD.MM.YYYY"),
           amount: transaction.amount,
@@ -237,29 +250,34 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
     return () => unsubscribe();
   }, [auth, fetchTransactions]);
 
-  const addTransaction = async (transaction) => {
-    if (auth.currentUser) {
-      try {
-        const transactionDate = dayjs(transaction.date).isValid()
-          ? Timestamp.fromDate(new Date(transaction.date))
-          : Timestamp.now();
+  const addTransaction = useCallback(
+    (transaction) => {
+      if (auth.currentUser) {
+        try {
+          const transactionDate = dayjs(transaction.date).isValid()
+            ? Timestamp.fromDate(new Date(transaction.date))
+            : Timestamp.now();
 
-        await addDoc(collection(db, "transactions"), {
-          ...transaction,
-          userId: auth.currentUser.uid,
-          date: transactionDate,
-          amount: parseFloat(transaction.amount),
-        });
+          addDoc(collection(db, "transactions"), {
+            ...transaction,
+            userId: auth.currentUser.uid,
+            date: transactionDate,
+            amount: parseFloat(transaction.amount),
+          });
 
-        // Обновляем состояние сразу после добавления тразакции
-        await fetchTransactions();
-      } catch (error) {
-        console.error("Error adding transaction: ", error);
+          fetchTransactions();
+          setLastTransaction(Date.now());
+          triggerPulse();
+          console.log("New transaction added, lastTransaction:", Date.now());
+        } catch (error) {
+          console.error("Error adding transaction: ", error);
+        }
+      } else {
+        console.error("User not authenticated");
       }
-    } else {
-      console.error("User not authenticated");
-    }
-  };
+    },
+    [auth, fetchTransactions, triggerPulse]
+  );
 
   const handleMonthChange = (newMonth) => {
     setSelectedMonth(newMonth);
@@ -337,44 +355,45 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <AppBar position="static" sx={{ bgcolor: themeColor }}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Whale Finance
-          </Typography>
-          <IconButton color="inherit" onClick={onColorChange}>
-            <ColorLensIcon />
-          </IconButton>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={isDeleteEnabled}
-                onChange={handleDeleteSwitch}
-                color="secondary"
-              />
-            }
-            // label="Удаление истории"
-          />
-          {isDeleteEnabled && (
-            <Button color="inherit" onClick={handleDeleteAllTransactions}>
-              Удалить все
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
+      {!isMobile && (
+        <AppBar position="static" sx={{ bgcolor: themeColor }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Whale Finance
+            </Typography>
+            <IconButton color="inherit" onClick={onColorChange}>
+              <ColorLensIcon />
+            </IconButton>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isDeleteEnabled}
+                  onChange={handleDeleteSwitch}
+                  color="secondary"
+                />
+              }
+            />
+            {isDeleteEnabled && (
+              <Button color="inherit" onClick={handleDeleteAllTransactions}>
+                Удалить все
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      )}
       <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Введите пароль</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Для удаления всех транзакций ведите пароль.
+            Для удаления все�� транзакций ведите пароль.
           </DialogContentText>
           <TextField
             autoFocus
@@ -396,9 +415,18 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
         </DialogActions>
       </Dialog>
       <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
-        <StyledContainer maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <StyledContainer maxWidth="lg" sx={{ mt: 3, mb: 2 }}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4} lg={3} sx={{ minWidth: { md: 320 } }}>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              lg={3}
+              sx={{
+                minWidth: { md: 320 },
+                paddingTop: { xs: "0px !important", sm: "24px !important" },
+              }}
+            >
               <BankCard
                 balance={balance}
                 progressValue={progressValue}
@@ -420,6 +448,8 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                   balance={balance}
                   savingsBalance={savingsBalance}
                   themeColor={themeColor}
+                  lastTransaction={lastTransaction}
+                  isPulsing={isPulsing}
                 />
               </Box>
             </Grid>
@@ -451,7 +481,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                   <StyledAccordion
                     expanded={expanded.panel1}
                     onChange={handleChange("panel1")}
-                    sx={{ display: { xs: "none", sm: "block" } }} // Изменено условие отображения
+                    sx={{ display: { xs: "none", sm: "block" } }}
                   >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -534,7 +564,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: { xs: 400, sm: 300 }, // Изменено условие ширины для мобильных устройств
+            width: { xs: 400, sm: 300 },
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
@@ -546,7 +576,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
           <IncomeExpenseForm
             onAddTransaction={addTransaction}
             onMonthChange={handleMonthChange}
-            handleClose={handleClose} // Передаем функцию handleClose
+            handleClose={handleClose}
           />
         </Box>
       </Modal>

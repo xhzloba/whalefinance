@@ -1,7 +1,7 @@
 {
   "name": "finance",
   "private": true,
-  "version": "1.1.2",
+  "version": "1.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@date-io/date-fns": "^3.0.0",

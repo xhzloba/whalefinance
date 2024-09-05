@@ -10,13 +10,26 @@ import {
 import { styled } from "@mui/system";
 import { NumericFormat } from "react-number-format";
 import IncomeExpenseForm from "./IncomeExpenseForm";
-import dayjs from "dayjs"; // Добавьте эту строку
+import dayjs from "dayjs";
+import logoImage from "../assets/whale-logo.png";
 
 const CardContainer = styled(Box)({
   width: "100%",
   aspectRatio: "1.586 / 1",
   perspective: "1000px",
   cursor: "pointer",
+});
+
+const LogoContainer = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  marginBottom: "10px",
+});
+
+const Logo = styled("img")({
+  width: "30px",
+  height: "30px",
+  marginRight: "10px",
 });
 
 const CardInner = styled(Box)(({ flipped }) => ({
@@ -37,7 +50,6 @@ const CardSide = styled(Box)(({ theme }) => ({
   boxShadow: "0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "space-between",
   color: "white",
   fontFamily: "'Roboto', sans-serif",
   overflow: "hidden",
@@ -165,7 +177,12 @@ const BankCard = ({
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
           <CardFront
-            sx={{ borderBottomRightRadius: "0", borderBottomLeftRadius: "0" }}
+            sx={{
+              borderBottomRightRadius: { xs: "0px", sm: "10px" },
+              borderBottomLeftRadius: { xs: "0px", sm: "10px" },
+              borderTopRightRadius: { xs: "0px", sm: "10px" },
+              borderTopLeftRadius: { xs: "0px", sm: "10px" },
+            }}
           >
             <Box
               sx={{
@@ -204,9 +221,10 @@ const BankCard = ({
               </Button>
             </Box>
             <Box>
-              <Typography variant="h6" gutterBottom>
-                Сбербанк
-              </Typography>
+              <LogoContainer>
+                <Logo src={logoImage} alt="Whale Finance Logo" />
+                <Typography variant="h6">Whale Finance</Typography>
+              </LogoContainer>
               <LinearProgress
                 variant="determinate"
                 value={progressValue}
@@ -231,16 +249,10 @@ const BankCard = ({
                     )}% от дохода ${lastIncomeAmount.toFixed(2)} ₽)`
                   : "Нет доходов в текущем периоде"}
               </Typography>
-              {/* <Typography variant="body2" sx={{ mt: 1 }}>
-                Текущий баланс: {balance.toFixed(2)} ₽
-              </Typography> */}
             </Box>
             <Box>
               <Typography variant="body2">Баланс</Typography>
               <AnimatedBalance value={displayBalance} />
-            </Box>
-            <Box sx={{ alignSelf: "flex-end" }}>
-              <Typography variant="body2">12/25</Typography>
             </Box>
           </CardFront>
           <CardBack>

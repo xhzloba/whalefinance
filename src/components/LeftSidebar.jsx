@@ -23,8 +23,7 @@ const paperStyle = {
   borderRadius: "8px",
 };
 
-function LeftSidebar({ balance, savingsBalance, themeColor }) {
-  console.log(themeColor);
+function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("ru-RU", {
       style: "currency",
@@ -163,6 +162,33 @@ function LeftSidebar({ balance, savingsBalance, themeColor }) {
         borderTopLeftRadius: {
           xs: 25,
         },
+        boxShadow: {
+          xs: isPulsing ? "none" : "3px -16px 31px #95f8ff",
+          sm: "rgba(38, 38, 38, 0.04) 0px 1px 2px, rgba(38, 38, 38, 0.16) 0px 4px 8px",
+        },
+        position: "relative",
+        overflow: "hidden",
+        "&::before": isPulsing
+          ? {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: "-100%",
+              width: "200%",
+              height: "100%",
+              background:
+                "linear-gradient(90deg, transparent, rgba(0, 180, 180, 0.3), rgba(0, 206, 209, 0.5), rgba(0, 180, 180, 0.3), transparent)",
+              animation: "wave 2s linear infinite",
+            }
+          : {},
+        "@keyframes wave": {
+          "0%": {
+            left: "-100%",
+          },
+          "100%": {
+            left: "100%",
+          },
+        },
       }}
     >
       <AccountSection
@@ -190,4 +216,4 @@ function LeftSidebar({ balance, savingsBalance, themeColor }) {
   );
 }
 
-export default LeftSidebar;
+export default React.memo(LeftSidebar);
