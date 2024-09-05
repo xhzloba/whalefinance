@@ -354,22 +354,19 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
     console.log("Баланс обновлен после изменения транзакций:", balance);
   }, [transactions, balance, calculateProgressValue]);
 
-  const handleRefresh = useCallback(
-    async (resolve) => {
-      console.log("Refreshing data...");
-      try {
-        await fetchTransactions();
-        console.log("Data refreshed successfully");
-        toast.success("Данные обновлены");
-      } catch (error) {
-        console.error("Error refreshing data:", error);
-        toast.error("Ошибка при обновлении данных");
-      } finally {
-        resolve();
-      }
-    },
-    [fetchTransactions]
-  );
+  const handleRefresh = useCallback((resolve) => {
+    console.log("Refreshing page...");
+    // Показываем уведомление о начале обновления
+    toast.info("Обновление страницы...", { autoClose: 2000 });
+
+    // Устанавливаем небольшую задержку перед обновлением страницы
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+
+    // Вызываем resolve() сразу, так как страница будет перезагружена
+    resolve();
+  }, []);
 
   return (
     <PullToRefresh onRefresh={handleRefresh} pullDownThreshold={200}>
