@@ -22,7 +22,6 @@ body {
 
 #root {
   min-height: 100vh;
-  padding-top: env(safe-area-inset-top);
 }
 
 * {
@@ -93,6 +92,7 @@ button:focus-visible {
     background-image: url("../public/gradient.svg");
     background-attachment: fixed;
     background-size: cover;
+    /* padding-top: env(safe-area-inset-top); */
   }
 }
 

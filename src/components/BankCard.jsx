@@ -13,12 +13,16 @@ import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
 import logoImage from "../assets/whale-logo.png";
 
-const CardContainer = styled(Box)({
+const CardContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   aspectRatio: "1.586 / 1",
   perspective: "1000px",
   cursor: "pointer",
-});
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "calc(-1 * env(safe-area-inset-top))",
+    paddingTop: "env(safe-area-inset-top)",
+  },
+}));
 
 const LogoContainer = styled(Box)({
   display: "flex",
@@ -58,6 +62,7 @@ const CardSide = styled(Box)(({ theme }) => ({
 const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
+  borderRadius: 0, // Убираем скругление углов
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
@@ -178,14 +183,7 @@ const BankCard = ({
     <>
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
-          <CardFront
-            sx={{
-              borderBottomRightRadius: { xs: "0px", sm: "10px" },
-              borderBottomLeftRadius: { xs: "0px", sm: "10px" },
-              borderTopRightRadius: { xs: "0px", sm: "10px" },
-              borderTopLeftRadius: { xs: "0px", sm: "10px" },
-            }}
-          >
+          <CardFront>
             <Box
               sx={{
                 position: "absolute",
@@ -245,7 +243,7 @@ const BankCard = ({
                   ? `Расходы с ${dayjs(lastIncomeDate).format(
                       "DD.MM.YYYY"
                     )}: ${currentMonthExpenses.toFixed(2)} ₽`
-                  : "Нет доходов в текущем периоде"}
+                  : "ет доходов в текущем периоде"}
               </Typography>
               <Typography variant="body2" sx={{ mt: 0.5 }}>
                 {lastIncomeDate
