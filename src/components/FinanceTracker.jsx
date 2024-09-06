@@ -53,6 +53,7 @@ import {
   writeBatch,
   Timestamp,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -417,7 +418,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
     try {
       const resetDocRef = doc(db, "progressResets", auth.currentUser.uid);
-      const resetDocSnap = await getDocs(resetDocRef);
+      const resetDocSnap = await getDoc(resetDocRef);
       if (resetDocSnap.exists()) {
         const resetData = resetDocSnap.data();
         setLastResetBalance(resetData.resetBalance);
