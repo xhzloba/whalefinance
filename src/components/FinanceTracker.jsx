@@ -354,7 +354,21 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
       setBalance(0);
       setCurrentMonthExpenses(0);
       setProgressValue(0);
-      console.log("Все транзакции удалены, баланс обнулен");
+      setLastIncomeAmount(0);
+      setLastIncomeDate(null);
+
+      // Сбрасываем данные о последнем сбросе
+      setLastResetBalance(0);
+      setLastResetDate(null);
+
+      // Обновляем данные о сбросе в Firestore
+      await setDoc(doc(db, "progressResets", auth.currentUser.uid), {
+        userId: auth.currentUser.uid,
+        resetDate: null,
+        resetBalance: 0,
+      });
+
+      console.log("Все транзакции удалены, все значения обнулены");
     } catch (error) {
       console.error("Error deleting all transactions:", error);
     }
