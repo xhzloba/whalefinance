@@ -1,55 +1,96 @@
-import React from "react";
-import { styled, keyframes } from "@mui/system";
+import React, { useState, useEffect, useCallback } from "react";
+import { styled } from "@mui/system";
 
-const bubbleAnimation = keyframes`
-  0% {
-    transform: translateY(0) scale(0);
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    transform: translateY(-100vh) scale(1);
-    opacity: 0;
-  }
-`;
-
-const Bubble = styled("div")(({ size, left, duration, delay }) => ({
+const BubbleContainer = styled("div")({
   position: "absolute",
-  bottom: `-${size}px`,
-  left: `${left}%`,
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  pointerEvents: "none",
+});
+
+const Bubble = styled("div")(({ size }) => ({
+  position: "absolute",
   width: `${size}px`,
   height: `${size}px`,
   borderRadius: "50%",
-  background: "rgba(255, 255, 255, 0.1)",
-  animation: `${bubbleAnimation} ${duration}s infinite linear`,
-  animationDelay: `${delay}s`,
+  background:
+    "radial-gradient(circle at 33% 33%, rgba(255,255,255,0.3), rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 60%)",
+  boxShadow:
+    "inset 0 0 20px rgba(255, 255, 255, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2), 0 0 10px rgba(255, 255, 255, 0.1)",
+  border: "1px solid rgba(255, 255, 255, 0.2)",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: "5%",
+    left: "10%",
+    width: "30%",
+    height: "30%",
+    borderRadius: "50%",
+    background:
+      "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(255,255,255,0.2) 100%)",
+  },
 }));
 
-const BubbleAnimation = ({ count = 30 }) => {
-  const generateBubbles = () => {
-    const bubbles = [];
-    for (let i = 0; i < count; i++) {
-      const size = Math.random() * 40 + 5; // Размер от 5px до 25px
-      const left = Math.random() * 100; // Позиция по горизонтали
-      const duration = Math.random() * 10 + 5; // Длительность анимации от 5 до 15 секунд
-      const delay = Math.random() * 5; // Задержка до 5 секунд
+const BubbleAnimation = () => {
+  const [bubbles, setBubbles] = useState([]);
 
-      bubbles.push(
+  const createBubble = useCallback(() => {
+    const size = Math.random() * 60 + 30; // Увеличен минимальный размер пузырей
+    return {
+      id: Math.random(),
+      size,
+      left: Math.random() * 100,
+      top: 100 + size,
+      speed: Math.random() * 0.3 + 0.1,
+      lifespan: Math.random() * 5000 + 4000,
+    };
+  }, []);
+
+  const animateBubbles = useCallback(() => {
+    setBubbles((prevBubbles) =>
+      prevBubbles
+        .map((bubble) => ({
+          ...bubble,
+          top: bubble.top - bubble.speed,
+          lifespan: bubble.lifespan - 16,
+        }))
+        .filter((bubble) => bubble.lifespan > 0 && bubble.top + bubble.size > 0)
+    );
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (Math.random() < 0.2) {
+        // 20% шанс создания нового пузыря
+        setBubbles((prevBubbles) => [...prevBubbles, createBubble()]);
+      }
+    }, 400);
+
+    const animationId = setInterval(animateBubbles, 16);
+
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(animationId);
+    };
+  }, [createBubble, animateBubbles]);
+
+  return (
+    <BubbleContainer>
+      {bubbles.map((bubble) => (
         <Bubble
-          key={i}
-          size={size}
-          left={left}
-          duration={duration}
-          delay={delay}
+          key={bubble.id}
+          size={bubble.size}
+          style={{
+            left: `${bubble.left}%`,
+            top: `${bubble.top}px`,
+            opacity: bubble.lifespan / 9000,
+          }}
         />
-      );
-    }
-    return bubbles;
-  };
-
-  return <>{generateBubbles()}</>;
+      ))}
+    </BubbleContainer>
+  );
 };
 
 export default BubbleAnimation;

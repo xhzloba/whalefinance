@@ -181,6 +181,7 @@ const BankCard = ({
     <>
       <SafeAreaContainer />
       <CardContainer onClick={handleClick}>
+        <BubbleAnimation />
         <CardInner flipped={flipped}>
           <CardFront className="card-front">
             <BubbleAnimation count={130} />
