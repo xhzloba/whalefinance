@@ -78,14 +78,14 @@ const CardSide = styled(Box)(({ theme }) => ({
 
 const bubbleAnimation = keyframes`
   0% {
-    transform: translateY(0) scale(0);
+    transform: translate(0, 0) scale(0);
     opacity: 0;
   }
   50% {
     opacity: 1;
   }
   100% {
-    transform: translateY(-100vh) scale(1);
+    transform: translate(0, -100vh) scale(1);
     opacity: 0;
   }
 `;
@@ -101,26 +101,26 @@ const whaleAnimation = keyframes`
 
 const Bubble = styled(Box)(({ size, left }) => ({
   position: "absolute",
-  bottom: "-50px", // Увеличено, чтобы пузырьки появлялись ниже
+  bottom: "-30px",
   left: `${left}%`,
   width: `${size}px`,
   height: `${size}px`,
   borderRadius: "50%",
   background:
-    "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))", // Градиент для эффекта объема
-  boxShadow: "0 0 10px rgba(255, 255, 255, 0.3)", // Легкое свечение
-  animation: `${bubbleAnimation} ${15 + Math.random() * 15}s linear infinite`, // Увеличено время анимации
-  animationDelay: `${Math.random() * 10}s`, // Увеличена задержка для разнообразия
+    "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))",
+  boxShadow: "0 0 5px rgba(255, 255, 255, 0.3)",
+  animation: `${bubbleAnimation} ${10 + Math.random() * 10}s linear infinite`,
+  animationDelay: `${Math.random() * 5}s`,
   zIndex: 1,
+  willChange: "transform",
 }));
 
 const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
-  borderRadius: 0, // Убираем скругление углов
+  borderRadius: 0,
   paddingTop: "calc(env(safe-area-inset-top) + 25px)",
   "& > *:not(${Bubble})": {
-    // Добавлен селектор для всего контента, кроме пузырьков
     position: "relative",
     zIndex: 3,
   },
@@ -131,7 +131,6 @@ const CardBack = styled(CardSide)(({ theme }) => ({
   transform: "rotateY(180deg)",
 }));
 
-// Функция для изменения яркости цвета
 function adjustColor(color, amount) {
   return (
     "#" +
@@ -171,7 +170,7 @@ const AnimatedBalance = ({ value }) => {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
-    const animationDuration = 1000; // 1 секунда
+    const animationDuration = 1000;
     const steps = 60;
     const increment = (value - displayValue) / steps;
     let currentStep = 0;
@@ -249,18 +248,13 @@ const BankCard = ({
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
           <CardFront>
-            {[...Array(15)].map(
-              (
-                _,
-                index // Уменьшено количество пузырей
-              ) => (
-                <Bubble
-                  key={index}
-                  size={20 + Math.random() * 60} // Значительно увеличен размер пузырей
-                  left={Math.random() * 100}
-                />
-              )
-            )}
+            {[...Array(10)].map((_, index) => (
+              <Bubble
+                key={index}
+                size={15 + Math.random() * 30}
+                left={Math.random() * 100}
+              />
+            ))}
             <Box
               sx={{
                 position: "absolute",
