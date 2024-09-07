@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { styled } from "@mui/system";
+import { styled, keyframes } from "@mui/system";
 import { NumericFormat } from "react-number-format";
 import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
@@ -76,11 +76,54 @@ const CardSide = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const bubbleAnimation = keyframes`
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
+  }
+`;
+
+const whaleAnimation = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
+
+const Bubble = styled(Box)(({ size, left }) => ({
+  position: "absolute",
+  bottom: "-50px", // Увеличено, чтобы пузырьки появлялись ниже
+  left: `${left}%`,
+  width: `${size}px`,
+  height: `${size}px`,
+  borderRadius: "50%",
+  background:
+    "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))", // Градиент для эффекта объема
+  boxShadow: "0 0 10px rgba(255, 255, 255, 0.3)", // Легкое свечение
+  animation: `${bubbleAnimation} ${15 + Math.random() * 15}s linear infinite`, // Увеличено время анимации
+  animationDelay: `${Math.random() * 10}s`, // Увеличена задержка для разнообразия
+  zIndex: 1,
+}));
+
 const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
   borderRadius: 0, // Убираем скругление углов
   paddingTop: "calc(env(safe-area-inset-top) + 25px)",
+  "& > *:not(${Bubble})": {
+    // Добавлен селектор для всего контента, кроме пузырьков
+    position: "relative",
+    zIndex: 3,
+  },
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
@@ -206,6 +249,18 @@ const BankCard = ({
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
           <CardFront>
+            {[...Array(15)].map(
+              (
+                _,
+                index // Уменьшено количество пузырей
+              ) => (
+                <Bubble
+                  key={index}
+                  size={20 + Math.random() * 60} // Значительно увеличен размер пузырей
+                  left={Math.random() * 100}
+                />
+              )
+            )}
             <Box
               sx={{
                 position: "absolute",
