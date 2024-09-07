@@ -204,12 +204,10 @@ const BankCard = ({
 
   const handleOpen = () => {
     setOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   const handleClose = () => {
     setOpen(false);
-    document.body.style.overflow = "unset";
   };
 
   const getProgressColor = (value) => {
