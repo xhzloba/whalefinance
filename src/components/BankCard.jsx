@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { styled } from "@mui/system";
+import { styled, keyframes } from "@mui/system";
 import { NumericFormat } from "react-number-format";
 import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
@@ -38,6 +38,11 @@ const CardContainer = styled(Box)(({ theme }) => ({
   position: "relative",
   zIndex: 1,
 }));
+
+const CardContent = styled("div")({
+  position: "relative",
+  zIndex: 1,
+});
 
 const LogoContainer = styled(Box)({
   display: "flex",
@@ -149,6 +154,29 @@ const AnimatedBalance = ({ value }) => {
   );
 };
 
+const glassEffect = keyframes`
+  0% {
+    background: rgba(255, 255, 255, 0);
+  }
+  50% {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0);
+  }
+`;
+
+const GlassOverlay = styled(Box)(({ active }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  zIndex: 10,
+  pointerEvents: "none",
+  animation: active ? `${glassEffect} 2s ease-in-out` : "none",
+}));
+
 const BankCard = ({
   balance,
   progressValue,
@@ -161,6 +189,17 @@ const BankCard = ({
 }) => {
   const [flipped, setFlipped] = useState(false);
   const [open, setOpen] = useState(false);
+  const [glassActive, setGlassActive] = useState(false);
+  const prevBalanceRef = useRef(balance);
+
+  useEffect(() => {
+    if (balance > prevBalanceRef.current) {
+      setGlassActive(true);
+      const timer = setTimeout(() => setGlassActive(false), 2000);
+      return () => clearTimeout(timer);
+    }
+    prevBalanceRef.current = balance;
+  }, [balance]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -184,6 +223,7 @@ const BankCard = ({
         <BubbleAnimation />
         <CardInner flipped={flipped}>
           <CardFront className="card-front">
+            <GlassOverlay active={glassActive} />
             <BubbleAnimation count={130} />
             <span></span>
             <Box

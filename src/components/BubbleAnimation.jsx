@@ -52,7 +52,7 @@ const BubbleAnimation = () => {
   };
 
   const createBubble = useCallback(() => {
-    const size = Math.random() * 20 + 30;
+    const size = Math.random() * 20 + 10;
     return {
       id: Math.random(),
       size,
@@ -79,6 +79,7 @@ const BubbleAnimation = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (Math.random() < 0.2) {
+        // 20% шанс создания нового пузыря
         setBubbles((prevBubbles) => [...prevBubbles, createBubble()]);
       }
     }, 400);
