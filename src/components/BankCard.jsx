@@ -78,14 +78,14 @@ const CardSide = styled(Box)(({ theme }) => ({
 
 const bubbleAnimation = keyframes`
   0% {
-    transform: translate(0, 0) scale(0);
+    --y: 100%;
     opacity: 0;
   }
   50% {
     opacity: 1;
   }
   100% {
-    transform: translate(0, -100vh) scale(1);
+    --y: -20%;
     opacity: 0;
   }
 `;
@@ -101,7 +101,7 @@ const whaleAnimation = keyframes`
 
 const Bubble = styled(Box)(({ size, left }) => ({
   position: "absolute",
-  bottom: "-30px",
+  bottom: "0",
   left: `${left}%`,
   width: `${size}px`,
   height: `${size}px`,
@@ -109,10 +109,11 @@ const Bubble = styled(Box)(({ size, left }) => ({
   background:
     "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))",
   boxShadow: "0 0 5px rgba(255, 255, 255, 0.3)",
-  animation: `${bubbleAnimation} ${10 + Math.random() * 10}s linear infinite`,
+  opacity: 0,
+  transform: "translateY(var(--y))",
+  animation: `${bubbleAnimation} ${8 + Math.random() * 7}s linear infinite`,
   animationDelay: `${Math.random() * 5}s`,
   zIndex: 1,
-  willChange: "transform",
 }));
 
 const CardFront = styled(CardSide)(({ theme }) => ({
@@ -120,6 +121,7 @@ const CardFront = styled(CardSide)(({ theme }) => ({
   zIndex: 2,
   borderRadius: 0,
   paddingTop: "calc(env(safe-area-inset-top) + 25px)",
+  overflow: "hidden",
   "& > *:not(${Bubble})": {
     position: "relative",
     zIndex: 3,
@@ -248,10 +250,10 @@ const BankCard = ({
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
           <CardFront>
-            {[...Array(10)].map((_, index) => (
+            {[...Array(8)].map((_, index) => (
               <Bubble
                 key={index}
-                size={15 + Math.random() * 30}
+                size={10 + Math.random() * 20}
                 left={Math.random() * 100}
               />
             ))}
