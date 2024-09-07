@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
@@ -9,11 +9,12 @@ import {
   IconButton,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { styled, keyframes } from "@mui/system";
+import { styled } from "@mui/system";
 import { NumericFormat } from "react-number-format";
 import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
 import logoImage from "../assets/whale-logo.png";
+import BubbleAnimation from "./BubbleAnimation";
 
 const SafeAreaContainer = styled(Box)({
   paddingTop: "env(safe-area-inset-top)",
@@ -76,76 +77,18 @@ const CardSide = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const bubbleAnimation = keyframes`
-  0% {
-    --y: 100%;
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    --y: -20%;
-    opacity: 0;
-  }
-`;
-
-const whaleAnimation = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-`;
-
-const Bubble = styled(Box)(({ size, left }) => ({
-  position: "absolute",
-  bottom: "0",
-  left: `${left}%`,
-  width: `${size}px`,
-  height: `${size}px`,
-  borderRadius: "50%",
-  background:
-    "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))",
-  boxShadow: "0 0 5px rgba(255, 255, 255, 0.3)",
-  opacity: 0,
-  transform: "translateY(var(--y))",
-  animation: `${bubbleAnimation} ${8 + Math.random() * 7}s linear infinite`,
-  animationDelay: `${Math.random() * 5}s`,
-  zIndex: 1,
-}));
-
 const CardFront = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
   zIndex: 2,
   borderRadius: 0,
   paddingTop: "calc(env(safe-area-inset-top) + 25px)",
   overflow: "hidden",
-  "& > *:not(${Bubble})": {
-    position: "relative",
-    zIndex: 3,
-  },
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
   background: "linear-gradient(45deg, #008793 0%, #004d7a 50%, #051937 100%)",
   transform: "rotateY(180deg)",
 }));
-
-function adjustColor(color, amount) {
-  return (
-    "#" +
-    color
-      .replace(/^#/, "")
-      .replace(/../g, (color) =>
-        (
-          "0" +
-          Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)
-        ).substr(-2)
-      )
-  );
-}
 
 const CardBalance = styled(Typography)(({ theme }) => ({
   filter: "drop-shadow(0px 10px 15px black)",
@@ -216,16 +159,6 @@ const BankCard = ({
   handleMonthChange,
   resetProgress,
 }) => {
-  console.log("BankCard рендеринг:", {
-    balance,
-    progressValue,
-    currentMonthExpenses,
-    lastIncomeDate: lastIncomeDate
-      ? dayjs(lastIncomeDate).format("DD.MM.YYYY")
-      : "Нет",
-    lastIncomeAmount,
-  });
-
   const [flipped, setFlipped] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -249,14 +182,9 @@ const BankCard = ({
       <SafeAreaContainer />
       <CardContainer onClick={handleClick}>
         <CardInner flipped={flipped}>
-          <CardFront>
-            {[...Array(8)].map((_, index) => (
-              <Bubble
-                key={index}
-                size={10 + Math.random() * 20}
-                left={Math.random() * 100}
-              />
-            ))}
+          <CardFront className="card-front">
+            <BubbleAnimation count={130} />
+            <span></span>
             <Box
               sx={{
                 position: "absolute",
