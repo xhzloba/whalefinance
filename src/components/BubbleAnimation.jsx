@@ -32,7 +32,7 @@ const Bubble = styled("div")(({ size, color }) => ({
     height: "30%",
     borderRadius: "50%",
     background:
-      "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(255,255,255,0.2) 100%)",
+        "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(255,255,255,0.2) 100%)",
   },
 }));
 
@@ -66,13 +66,13 @@ const BubbleAnimation = () => {
 
   const animateBubbles = useCallback(() => {
     setBubbles((prevBubbles) =>
-      prevBubbles
-        .map((bubble) => ({
-          ...bubble,
-          top: bubble.top - bubble.speed,
-          lifespan: bubble.lifespan - 16,
-        }))
-        .filter((bubble) => bubble.lifespan > 0 && bubble.top + bubble.size > 0)
+        prevBubbles
+            .map((bubble) => ({
+              ...bubble,
+              top: bubble.top - bubble.speed,
+              lifespan: bubble.lifespan - 16,
+            }))
+            .filter((bubble) => bubble.lifespan > 0 && bubble.top + bubble.size > 0)
     );
   }, []);
 
@@ -93,20 +93,20 @@ const BubbleAnimation = () => {
   }, [createBubble, animateBubbles]);
 
   return (
-    <BubbleContainer>
-      {bubbles.map((bubble) => (
-        <Bubble
-          key={bubble.id}
-          size={bubble.size}
-          color={bubble.color}
-          style={{
-            left: `${bubble.left}%`,
-            top: `${bubble.top}px`,
-            opacity: bubble.lifespan / 9000,
-          }}
-        />
-      ))}
-    </BubbleContainer>
+      <BubbleContainer>
+        {bubbles.map((bubble) => (
+            <Bubble
+                key={bubble.id}
+                size={bubble.size}
+                color={bubble.color}
+                style={{
+                  left: `${bubble.left}%`,
+                  top: `${bubble.top}px`,
+                  opacity: bubble.lifespan / 9000,
+                }}
+            />
+        ))}
+      </BubbleContainer>
   );
 };
 
