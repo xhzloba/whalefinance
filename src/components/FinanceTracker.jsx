@@ -36,8 +36,6 @@ import dayjs from "dayjs";
 import BankCard from "./BankCard";
 import ExpenseAnalysis from "./ExpenseAnalysis";
 import CategoryLimits from "./CategoryLimits";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 
 import { db } from "../firebaseConfig";
@@ -527,6 +525,10 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                   mt: { xs: 0, sm: 3 },
                   position: { xs: "relative", sm: "static" },
                   top: { sm: 0, xs: "-24px" },
+                  boxShadow: {
+                    xs: "2px 3px 33px black, 1px 17px 36px black",
+                    sm: "none",
+                  },
                 }}
               >
                 <LeftSidebar

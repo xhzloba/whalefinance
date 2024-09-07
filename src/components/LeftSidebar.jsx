@@ -157,10 +157,10 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
           sm: 3, // стандартный borderRadius на экранах больше телефона
         },
         borderTopRightRadius: {
-          xs: 25,
+          xs: 42,
         },
         borderTopLeftRadius: {
-          xs: 25,
+          xs: 42,
         },
         boxShadow: {
           xs: isPulsing ? "none" : "3px -16px 31px #95f8ff",
