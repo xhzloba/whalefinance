@@ -156,13 +156,13 @@ const AnimatedBalance = ({ value }) => {
 
 const glassEffect = keyframes`
   0% {
-    background: rgba(255, 255, 255, 0);
+    background: rgba(64, 224, 208, 0);
   }
   50% {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(64, 224, 208, 0.3);
   }
   100% {
-    background: rgba(255, 255, 255, 0);
+    background: rgba(64, 224, 208, 0);
   }
 `;
 
@@ -175,6 +175,7 @@ const GlassOverlay = styled(Box)(({ active }) => ({
   zIndex: 10,
   pointerEvents: "none",
   animation: active ? `${glassEffect} 2s ease-in-out` : "none",
+  borderRadius: "inherit", // Чтобы эффект соответствовал форме карты
 }));
 
 const BankCard = ({
