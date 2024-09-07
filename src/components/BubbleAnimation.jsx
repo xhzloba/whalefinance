@@ -10,15 +10,18 @@ const BubbleContainer = styled("div")({
   pointerEvents: "none",
 });
 
-const Bubble = styled("div")(({ size }) => ({
+const Bubble = styled("div")(({ size, color }) => ({
   position: "absolute",
   width: `${size}px`,
   height: `${size}px`,
   borderRadius: "50%",
-  background:
-    "radial-gradient(circle at 33% 33%, rgba(255,255,255,0.3), rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 60%)",
-  boxShadow:
-    "inset 0 0 20px rgba(255, 255, 255, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2), 0 0 10px rgba(255, 255, 255, 0.1)",
+  background: `radial-gradient(circle at 33% 33%, 
+    rgba(255,255,255,0.3), 
+    ${color} 40%, 
+    rgba(255,255,255,0) 60%)`,
+  boxShadow: `inset 0 0 20px rgba(255, 255, 255, 0.5), 
+    inset 0 0 20px ${color}, 
+    0 0 10px rgba(255, 255, 255, 0.1)`,
   border: "1px solid rgba(255, 255, 255, 0.2)",
   "&::after": {
     content: '""',
@@ -36,8 +39,20 @@ const Bubble = styled("div")(({ size }) => ({
 const BubbleAnimation = () => {
   const [bubbles, setBubbles] = useState([]);
 
+  const getRandomColor = () => {
+    const colors = [
+      "rgba(255, 0, 0, 0.1)", // Красный
+      "rgba(0, 255, 0, 0.1)", // Зеленый
+      "rgba(0, 0, 255, 0.1)", // Синий
+      "rgba(255, 255, 0, 0.1)", // Желтый
+      "rgba(255, 0, 255, 0.1)", // Пурпурный
+      "rgba(0, 255, 255, 0.1)", // Голубой
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
   const createBubble = useCallback(() => {
-    const size = Math.random() * 60 + 30; // Увеличен минимальный размер пузырей
+    const size = Math.random() * 20 + 30;
     return {
       id: Math.random(),
       size,
@@ -45,6 +60,7 @@ const BubbleAnimation = () => {
       top: 100 + size,
       speed: Math.random() * 0.3 + 0.1,
       lifespan: Math.random() * 5000 + 4000,
+      color: getRandomColor(),
     };
   }, []);
 
@@ -63,7 +79,6 @@ const BubbleAnimation = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (Math.random() < 0.2) {
-        // 20% шанс создания нового пузыря
         setBubbles((prevBubbles) => [...prevBubbles, createBubble()]);
       }
     }, 400);
@@ -82,6 +97,7 @@ const BubbleAnimation = () => {
         <Bubble
           key={bubble.id}
           size={bubble.size}
+          color={bubble.color}
           style={{
             left: `${bubble.left}%`,
             top: `${bubble.top}px`,
