@@ -202,8 +202,15 @@ const BankCard = ({
     prevBalanceRef.current = balance;
   }, [balance]);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    document.body.style.overflow = "unset";
+  };
 
   const getProgressColor = (value) => {
     if (value < 50) return "#4caf50";
