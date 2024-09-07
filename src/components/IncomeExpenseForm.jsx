@@ -11,12 +11,74 @@ import {
   FormControl,
   InputLabel,
   Grid,
+  Typography,
+  Chip,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { styled } from "@mui/system";
 import "dayjs/locale/ru";
 import dayjs from "dayjs";
+
+const StyledTextField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "rgba(0, 137, 147, 0.3)",
+    },
+    "&:hover fieldset": {
+      borderColor: "rgba(0, 137, 147, 0.5)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#008793",
+    },
+  },
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: "#008793",
+  },
+});
+
+const StyledSelect = styled(Select)({
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "rgba(0, 137, 147, 0.3)",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "rgba(0, 137, 147, 0.5)",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#008793",
+  },
+});
+
+const StyledRadio = styled(Radio)({
+  "&.Mui-checked": {
+    color: "#008793",
+  },
+});
+
+const StyledButton = styled(Button)({
+  background: "linear-gradient(45deg, #051937 30%, #004d7a 90%)",
+  border: 0,
+  borderRadius: 3,
+  boxShadow: "0 3px 5px 2px rgba(0, 137, 147, .3)",
+  color: "white",
+  height: 48,
+  padding: "0 30px",
+  "&:hover": {
+    background: "linear-gradient(45deg, #004d7a 30%, #008793 90%)",
+  },
+});
+
+const StyledChip = styled(Chip)({
+  background: "rgba(0, 137, 147, 0.1)",
+  border: "1px solid rgba(0, 137, 147, 0.3)",
+  "&:hover": {
+    background: "rgba(0, 137, 147, 0.2)",
+  },
+  "&:focus": {
+    background: "rgba(0, 137, 147, 0.3)",
+  },
+});
 
 const expenseCategories = [
   "Транспорт и Связь",
@@ -87,27 +149,28 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12}>
             <RadioGroup
               row
               value={type}
               onChange={(e) => setType(e.target.value)}
+              sx={{ justifyContent: "center", mb: 2 }}
             >
               <FormControlLabel
                 value="income"
-                control={<Radio />}
-                label="Доход"
+                control={<StyledRadio color="success" />}
+                label={<Typography variant="subtitle1">Доход</Typography>}
               />
               <FormControlLabel
                 value="expense"
-                control={<Radio />}
-                label="Расход"
+                control={<StyledRadio color="error" />}
+                label={<Typography variant="subtitle1">Расход</Typography>}
               />
             </RadioGroup>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
+          <Grid item xs={12}>
+            <StyledTextField
               fullWidth
               label="Сумма"
               type="number"
@@ -115,24 +178,37 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
               onChange={handleAmountChange}
               required
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <Typography variant="subtitle1" sx={{ mr: 1 }}>
+                    ₽
+                  </Typography>
+                ),
+              }}
             />
             {type === "income" && (
-              <Box sx={{ mt: 1, display: { xs: "none", sm: "flex" }, gap: 1 }}>
+              <Box
+                sx={{
+                  mt: 2,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1,
+                  justifyContent: "center",
+                }}
+              >
                 {presetAmounts.map((value) => (
-                  <Button
+                  <StyledChip
                     key={value}
-                    variant="outlined"
-                    size="small"
+                    label={`${value} ₽`}
                     onClick={() => handlePresetAmountClick(value)}
-                  >
-                    {value}
-                  </Button>
+                    clickable
+                  />
                 ))}
               </Box>
             )}
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
+          <Grid item xs={12}>
+            <StyledTextField
               fullWidth
               label="Описание"
               value={description}
@@ -142,10 +218,10 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
             />
           </Grid>
           {type === "expense" && (
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <FormControl fullWidth required variant="outlined">
                 <InputLabel>Категория</InputLabel>
-                <Select
+                <StyledSelect
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   label="Категория"
@@ -155,13 +231,13 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
                       {cat}
                     </MenuItem>
                   ))}
-                </Select>
+                </StyledSelect>
               </FormControl>
             </Grid>
           )}
           {category === "Переводы онлайн" && (
-            <Grid item xs={12} sm={6}>
-              <TextField
+            <Grid item xs={12}>
+              <StyledTextField
                 fullWidth
                 label="Кому перевести"
                 value={recipient}
@@ -170,21 +246,30 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
               />
             </Grid>
           )}
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <DatePicker
               label="Дата"
               value={date}
               onChange={(newDate) => setDate(newDate)}
               renderInput={(params) => (
-                <TextField {...params} fullWidth variant="outlined" />
+                <StyledTextField {...params} fullWidth variant="outlined" />
               )}
             />
           </Grid>
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-              <Button variant="contained" color="primary" type="submit">
-                Добавить
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
+              <Button
+                variant="outlined"
+                onClick={handleClose}
+                sx={{ color: "#008793", borderColor: "#008793" }}
+              >
+                Отмена
               </Button>
+              <StyledButton variant="contained" type="submit">
+                Добавить
+              </StyledButton>
             </Box>
           </Grid>
         </Grid>

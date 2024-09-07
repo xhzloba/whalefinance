@@ -15,6 +15,7 @@ import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
 import logoImage from "../assets/whale-logo.png";
 import BubbleAnimation from "./BubbleAnimation";
+import icebergImage from "../assets/iceberg.png";
 
 const SafeAreaContainer = styled(Box)({
   paddingTop: "env(safe-area-inset-top)",
@@ -341,7 +342,7 @@ const BankCard = ({
             </Box>
             <Box>
               <Typography variant="body2">
-                Это обратная сторона вашей каты Сбербанка. Здесь находится
+                Это обратная сторона вашей каты Србанка. Здесь находится
                 магнитная полоса и код безопасности CVC.
               </Typography>
             </Box>
@@ -362,23 +363,101 @@ const BankCard = ({
         <Slide direction="up" in={open} mountOnEnter unmountOnExit>
           <Box
             sx={{
-              bgcolor: "background.paper",
+              background:
+                "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
               boxShadow: 24,
               p: 4,
               width: "100%",
               maxWidth: 600,
-              borderTopLeftRadius: 16,
-              borderTopRightRadius: 16,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              maxHeight: "80vh",
+              overflowY: "auto",
+              color: "white",
+              position: "relative",
+              overflow: "visible",
+              "& .MuiInputBase-root": {
+                color: "white",
+              },
+              "& .MuiInputLabel-root": {
+                color: "white",
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(255, 255, 255, 0.5)",
+              },
+              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "white",
+                },
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "white",
+                },
+              "& .MuiInputBase-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.7)",
+                opacity: 1,
+              },
+              "& .MuiSelect-icon": {
+                color: "white",
+              },
+              "& .MuiMenuItem-root": {
+                color: "black",
+              },
+              // Добавляем стили для инпутов суммы и описания
+              "& input[name='amount'], & input[name='description']": {
+                color: "white",
+                "&::placeholder": {
+                  color: "rgba(255, 255, 255, 0.7)",
+                  opacity: 1,
+                },
+              },
             }}
           >
-            <Typography variant="h6" component="h2" gutterBottom>
-              Добавить операцию
-            </Typography>
-            <IncomeExpenseForm
-              onAddTransaction={addTransaction}
-              onMonthChange={handleMonthChange}
-              handleClose={handleClose}
+            <Box
+              component="img"
+              src={icebergImage}
+              alt="Айсберг"
+              sx={{
+                position: "absolute",
+                left: 0,
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+                opacity: 0.7,
+                pointerEvents: "none",
+                zIndex: 0,
+                "@media (min-width: 321px)": {
+                  top: "-9%",
+                },
+                "@media (min-width: 379px)": {
+                  top: "-10%",
+                },
+                "@media (min-width: 400px) and (max-width: 458px)": {
+                  top: "-12%",
+                },
+                "@media (min-width: 459px)": {
+                  top: "-12%",
+                },
+                "@media (max-width: 1980px)": {
+                  top: "-14%",
+                },
+              }}
             />
+            <Box sx={{ position: "relative", zIndex: 1 }}>
+              <Typography
+                variant="h5"
+                component="h2"
+                gutterBottom
+                sx={{ mb: 3, fontWeight: "bold", color: "white" }}
+              >
+                Добавить операцию
+              </Typography>
+              <IncomeExpenseForm
+                onAddTransaction={addTransaction}
+                onMonthChange={handleMonthChange}
+                handleClose={handleClose}
+              />
+            </Box>
           </Box>
         </Slide>
       </Modal>
