@@ -224,7 +224,18 @@ const BankCard = ({
                   top: "calc(env(safe-area-inset-top) + 12px)",
                   right: "50px",
                   background: "transparent",
+                  fontSize: "30px",
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  lineHeight: "1",
+                  padding: "0",
+                  minWidth: "unset",
+                  minHeight: "unset",
                   color: "white",
+                  "&:focus": {
+                    outline: "none",
+                  },
                 }}
               >
                 <RestartAltIcon />

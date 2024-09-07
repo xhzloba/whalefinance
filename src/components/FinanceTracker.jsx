@@ -562,27 +562,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                     transactions={transactions}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <StyledAccordion
-                    expanded={expanded.panel1}
-                    onChange={handleChange("panel1")}
-                    sx={{ display: { xs: "none", sm: "block" } }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1bh-content"
-                      id="panel1bh-header"
-                    >
-                      <Typography variant="h6">Добавить операцию</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <IncomeExpenseForm
-                        onAddTransaction={addTransaction}
-                        onMonthChange={handleMonthChange}
-                      />
-                    </AccordionDetails>
-                  </StyledAccordion>
-                </Grid>
+                <Grid item xs={12}></Grid>
                 <Grid item xs={12}>
                   <StyledAccordion
                     expanded={expanded.panel2}
@@ -643,32 +623,6 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
           </Grid>
         </StyledContainer>
       </Box>
-
-      <Modal open={open} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: 400, sm: 300 },
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography variant="h6" component="h2">
-            Добавить операцию
-          </Typography>
-          <IncomeExpenseForm
-            onAddTransaction={addTransaction}
-            onMonthChange={handleMonthChange}
-            handleClose={handleClose}
-          />
-        </Box>
-      </Modal>
-
-      <ToastContainer />
     </Box>
   );
 };
