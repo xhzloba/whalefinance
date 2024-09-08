@@ -101,9 +101,10 @@ function Summary({
             "& .MuiTabs-indicator": { backgroundColor: "white" },
             // background: "#004973",
             boxShadow: `
-    -1px 1px 3px #007e8f, inset 1px -38px 1px #0000008f
+    -1px 1px 3px #55adb9, inset 0px -3px 20px 0px #0000008f
   `,
-            paddingTop: "12px !important",
+            pt: { xs: "42px !important", sm: "12px !important" },
+            pb: { xs: "42px !important", sm: "12px !important" },
           }}
         >
           <Tab icon={<TrendingUpIcon />} label="Доходы" />

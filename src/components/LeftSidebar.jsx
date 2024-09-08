@@ -146,14 +146,14 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
     <Paper
       sx={{
         ...paperStyle,
-        pl: 2,
-        pr: 2,
+        pl: { xs: 4, sm: 2 },
+        pr: { xs: 4, sm: 2 },
         pb: {
           sm: 2,
           xs: 4,
         },
         pt: {
-          xs: 1,
+          xs: 4,
           sm: 2,
         },
         bgcolor: "white.100",
@@ -168,7 +168,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
           xs: 42,
         },
         boxShadow: {
-          xs: isPulsing ? "none" : "3px -16px 31px #95f8ff",
+          xs: isPulsing ? "none" : "0px -11px 30px #00dfff",
           sm: "rgba(38, 38, 38, 0.04) 0px 1px 2px, rgba(38, 38, 38, 0.16) 0px 4px 8px",
         },
         position: "relative",
@@ -184,7 +184,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
               width: "200%",
               height: "100%",
               background:
-                "linear-gradient(90deg, transparent, rgba(0, 180, 180, 0.3), rgba(0, 206, 209, 0.5), rgba(0, 180, 180, 0.3), transparent)",
+                "linear-gradient(90deg, transparent, rgba(0, 180, 180, 0.3), rgba(3, 217, 220, 0.597), rgba(0, 180, 180, 0.3), transparent)",
               animation: "wave 2s linear infinite",
             }
           : {},

@@ -529,6 +529,12 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                     xs: "2px 3px 33px black, 1px 17px 36px black",
                     sm: "none",
                   },
+                  borderTopRightRadius: {
+                    xs: 42,
+                  },
+                  borderTopLeftRadius: {
+                    xs: 42,
+                  },
                 }}
               >
                 <LeftSidebar
