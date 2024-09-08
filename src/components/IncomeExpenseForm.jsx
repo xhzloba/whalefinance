@@ -20,63 +20,76 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { styled } from "@mui/system";
 import "dayjs/locale/ru";
 import dayjs from "dayjs";
+import AddIcon from "@mui/icons-material/Add";
 
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
+    color: "white",
     "& fieldset": {
-      borderColor: "rgba(0, 137, 147, 0.3)",
+      borderColor: "rgba(255, 255, 255, 0.5)",
     },
     "&:hover fieldset": {
-      borderColor: "rgba(0, 137, 147, 0.5)",
+      borderColor: "rgba(255, 255, 255, 0.7)",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#008793",
+      borderColor: "white",
     },
   },
+  "& .MuiInputLabel-root": {
+    color: "rgba(255, 255, 255, 0.7)",
+  },
   "& .MuiInputLabel-root.Mui-focused": {
-    color: "#008793",
+    color: "white",
+  },
+  "& input": {
+    color: "white",
+  },
+  "& input::placeholder": {
+    color: "rgba(255, 255, 255, 0.5)",
+    opacity: 1,
   },
 });
 
 const StyledSelect = styled(Select)({
+  color: "white",
   "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "rgba(0, 137, 147, 0.3)",
+    borderColor: "rgba(255, 255, 255, 0.5)",
   },
   "&:hover .MuiOutlinedInput-notchedOutline": {
-    borderColor: "rgba(0, 137, 147, 0.5)",
+    borderColor: "rgba(255, 255, 255, 0.7)",
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#008793",
+    borderColor: "white",
+  },
+  "& .MuiSvgIcon-root": {
+    color: "white",
   },
 });
 
 const StyledRadio = styled(Radio)({
+  color: "rgba(255, 255, 255, 0.7)",
   "&.Mui-checked": {
-    color: "#008793",
+    color: "white",
   },
 });
 
 const StyledButton = styled(Button)({
-  background: "linear-gradient(45deg, #051937 30%, #004d7a 90%)",
-  border: 0,
-  borderRadius: 3,
-  boxShadow: "0 3px 5px 2px rgba(0, 137, 147, .3)",
-  color: "white",
-  height: 48,
-  padding: "0 30px",
+  background: "white",
+  color: "#004d7a",
   "&:hover": {
-    background: "linear-gradient(45deg, #004d7a 30%, #008793 90%)",
+    background: "rgba(255, 255, 255, 0.8)",
   },
 });
 
 const StyledChip = styled(Chip)({
-  background: "rgba(0, 137, 147, 0.1)",
-  border: "1px solid rgba(0, 137, 147, 0.3)",
+  background: "rgba(255, 255, 255, 0.1)",
+  color: "white",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
   "&:hover": {
-    background: "rgba(0, 137, 147, 0.2)",
+    background: "rgba(255, 255, 255, 0.2)",
   },
   "&:focus": {
-    background: "rgba(0, 137, 147, 0.3)",
+    background: "rgba(255, 255, 255, 0.3)",
   },
 });
 
@@ -263,12 +276,12 @@ function IncomeExpenseForm({ onAddTransaction, handleClose }) {
               <Button
                 variant="outlined"
                 onClick={handleClose}
-                sx={{ color: "#008793", borderColor: "#008793" }}
+                sx={{ color: "white", borderColor: "white" }}
               >
                 Отмена
               </Button>
               <StyledButton variant="contained" type="submit">
-                Добавить
+                <AddIcon />
               </StyledButton>
             </Box>
           </Grid>

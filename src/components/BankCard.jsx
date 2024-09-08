@@ -395,8 +395,9 @@ const BankCard = ({
           <Box
             sx={{
               background:
-                "linear-gradient(45deg, #051937 0%, #004d7a 50%, #008793 100%)",
-              boxShadow: 24,
+                "linear-gradient(45deg, rgba(5,25,55,0.9) 0%, rgba(0,77,122,0.9) 50%, rgba(86,178,148,0.9) 100%)",
+              boxShadow:
+                "0px 0px 15px 4px rgba(0,0,0,0.5), 0px 0px 40px 8px rgba(0,0,0,0.3)",
               p: 4,
               width: "100%",
               maxWidth: 600,
