@@ -60,6 +60,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
           boxShadow: "none",
           "&:before": { display: "none" },
           backgroundColor: "transparent",
+          transition: "height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         }}
       >
         <AccordionSummary
@@ -98,12 +99,16 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
             <AddIcon sx={{ color: themeColor }} />
           </IconButton>
         </AccordionSummary>
-        <AccordionDetails sx={{ padding: 0, paddingTop: 1 }}>
+        <AccordionDetails
+          sx={{ padding: 0, paddingTop: 1, overflow: "hidden" }}
+        >
           <Box
             sx={{
               display: "flex",
               alignItems: "flex-start",
               justifyContent: "space-between",
+              transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+              opacity: expanded ? 1 : 0,
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
