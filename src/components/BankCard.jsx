@@ -15,7 +15,6 @@ import IncomeExpenseForm from "./IncomeExpenseForm";
 import dayjs from "dayjs";
 import logoImage from "../assets/whale-logo.png";
 import BubbleAnimation from "./BubbleAnimation";
-import icebergImage from "../assets/iceberg.png";
 
 const SafeAreaContainer = styled(Box)({
   paddingTop: "env(safe-area-inset-top)",
@@ -39,11 +38,6 @@ const CardContainer = styled(Box)(({ theme }) => ({
   position: "relative",
   zIndex: 1,
 }));
-
-const CardContent = styled("div")({
-  position: "relative",
-  zIndex: 1,
-});
 
 const LogoContainer = styled(Box)({
   display: "flex",
@@ -450,36 +444,6 @@ const BankCard = ({
               },
             }}
           >
-            <Box
-              component="img"
-              src={icebergImage}
-              alt="Айсберг"
-              sx={{
-                position: "absolute",
-                left: 0,
-                width: "100%",
-                height: "auto",
-                objectFit: "cover",
-                opacity: 0.7,
-                pointerEvents: "none",
-                zIndex: 0,
-                "@media (min-width: 321px)": {
-                  top: "-9%",
-                },
-                "@media (min-width: 379px)": {
-                  top: "-10%",
-                },
-                "@media (min-width: 400px) and (max-width: 458px)": {
-                  top: "-12%",
-                },
-                "@media (min-width: 459px)": {
-                  top: "-12%",
-                },
-                "@media (max-width: 1980px)": {
-                  top: "-14%",
-                },
-              }}
-            />
             <Box sx={{ position: "relative", zIndex: 1 }}>
               <Typography
                 variant="h5"
