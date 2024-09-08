@@ -155,6 +155,41 @@ const AnimatedBalance = ({ value }) => {
   );
 };
 
+const AnimatedValue = ({ value, suffix = "" }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const animationDuration = 1000;
+    const steps = 60;
+    const increment = (value - displayValue) / steps;
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      if (currentStep < steps) {
+        setDisplayValue((prevValue) => prevValue + increment);
+        currentStep++;
+      } else {
+        setDisplayValue(value);
+        clearInterval(timer);
+      }
+    }, animationDuration / steps);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return (
+    <NumericFormat
+      value={displayValue}
+      displayType={"text"}
+      thousandSeparator={" "}
+      decimalSeparator={","}
+      decimalScale={2}
+      fixedDecimalScale={true}
+      suffix={suffix}
+    />
+  );
+};
+
 const glassEffect = keyframes`
   0% {
     background: rgba(64, 224, 208, 0);
@@ -314,17 +349,19 @@ const BankCard = ({
               />
               <Typography variant="body2" sx={{ mt: 1 }}>
                 {balance > 0 && lastIncomeDate
-                  ? `Расходы с ${dayjs(lastIncomeDate).format(
-                      "DD.MM.YYYY"
-                    )}: ${currentMonthExpenses.toFixed(2)} ₽`
+                  ? `Расходы с ${dayjs(lastIncomeDate).format("DD.MM.YYYY")}: `
                   : "Нет доходов в текущем периоде"}
+                {balance > 0 && lastIncomeDate && (
+                  <AnimatedValue value={currentMonthExpenses} suffix=" ₽" />
+                )}
               </Typography>
               <Typography variant="body2" sx={{ mt: 0.5 }}>
-                {balance > 0 && lastIncomeDate && lastIncomeAmount > 0
-                  ? `${progressValue.toFixed(
-                      1
-                    )}% от дохода ${lastIncomeAmount.toFixed(2)} ₽`
-                  : ""}
+                {balance > 0 && lastIncomeDate && lastIncomeAmount > 0 && (
+                  <>
+                    <AnimatedValue value={progressValue} suffix="%" /> от дохода{" "}
+                    <AnimatedValue value={lastIncomeAmount} suffix=" ₽" />
+                  </>
+                )}
               </Typography>
             </Box>
             <Box>
