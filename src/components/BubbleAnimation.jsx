@@ -32,7 +32,7 @@ const Bubble = styled("div")(({ size, color }) => ({
     height: "30%",
     borderRadius: "50%",
     background:
-        "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(255,255,255,0.2) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8), rgba(255,255,255,0.2) 100%)",
   },
 }));
 
@@ -57,7 +57,8 @@ const BubbleAnimation = () => {
       id: Math.random(),
       size,
       left: Math.random() * 100,
-      top: 100 + size,
+      // Изменяем начальную позицию пузырей по вертикали
+      top: 120 + Math.random() * 30, // Начинаем с 120% высоты контейнера и добавляем случайное значение до 30%
       speed: Math.random() * 0.3 + 0.1,
       lifespan: Math.random() * 5000 + 4000,
       color: getRandomColor(),
@@ -66,13 +67,13 @@ const BubbleAnimation = () => {
 
   const animateBubbles = useCallback(() => {
     setBubbles((prevBubbles) =>
-        prevBubbles
-            .map((bubble) => ({
-              ...bubble,
-              top: bubble.top - bubble.speed,
-              lifespan: bubble.lifespan - 16,
-            }))
-            .filter((bubble) => bubble.lifespan > 0 && bubble.top + bubble.size > 0)
+      prevBubbles
+        .map((bubble) => ({
+          ...bubble,
+          top: bubble.top - bubble.speed,
+          lifespan: bubble.lifespan - 16,
+        }))
+        .filter((bubble) => bubble.lifespan > 0 && bubble.top + bubble.size > 0)
     );
   }, []);
 
@@ -93,20 +94,20 @@ const BubbleAnimation = () => {
   }, [createBubble, animateBubbles]);
 
   return (
-      <BubbleContainer>
-        {bubbles.map((bubble) => (
-            <Bubble
-                key={bubble.id}
-                size={bubble.size}
-                color={bubble.color}
-                style={{
-                  left: `${bubble.left}%`,
-                  top: `${bubble.top}px`,
-                  opacity: bubble.lifespan / 9000,
-                }}
-            />
-        ))}
-      </BubbleContainer>
+    <BubbleContainer>
+      {bubbles.map((bubble) => (
+        <Bubble
+          key={bubble.id}
+          size={bubble.size}
+          color={bubble.color}
+          style={{
+            left: `${bubble.left}%`,
+            top: `${bubble.top}px`,
+            opacity: bubble.lifespan / 9000,
+          }}
+        />
+      ))}
+    </BubbleContainer>
   );
 };
 
