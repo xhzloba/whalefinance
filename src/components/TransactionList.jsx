@@ -77,13 +77,13 @@ function TransactionList({ transactions, onDeleteTransaction }) {
 
   const formatDate = (date) => {
     if (date instanceof Timestamp) {
-      return dayjs(date.toDate());
+      return dayjs(date.toDate()).locale("ru");
     } else if (date && typeof date === "object" && "seconds" in date) {
-      return dayjs(new Date(date.seconds * 1000));
+      return dayjs(new Date(date.seconds * 1000)).locale("ru");
     } else if (dayjs(date).isValid()) {
-      return dayjs(date);
+      return dayjs(date).locale("ru");
     }
-    return dayjs();
+    return dayjs().locale("ru");
   };
 
   const filteredTransactions = useMemo(() => {
@@ -310,7 +310,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
               <React.Fragment key={dateString}>
                 <ListItem>
                   <ListItemText
-                    primary={date.format("DD MMMM YYYY")}
+                    primary={date.format("D MMMM YYYY")}
                     secondary={`Общие расходы: ${totalExpenses.toFixed(2)} ₽`}
                   />
                 </ListItem>

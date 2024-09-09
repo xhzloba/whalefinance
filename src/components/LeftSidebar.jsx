@@ -284,7 +284,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
               width: "200%",
               height: "100%",
               background:
-                "linear-gradient(90deg, transparent, rgba(0, 180, 180, 0.3), rgba(3, 217, 220, 0.597), rgba(0, 180, 180, 0.3), transparent)",
+                "linear-gradient(90deg, transparent, rgb(67, 187, 143), rgba(94, 214, 227, 0.969), rgba(113, 255, 253, 0.895), transparent)",
               animation: "wave 2s linear infinite",
             }
           : {},
