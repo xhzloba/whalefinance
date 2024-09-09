@@ -35,7 +35,6 @@ const CardContainer = styled(Box)(({ theme }) => ({
     marginTop: "calc(-1 * env(safe-area-inset-top))",
     paddingTop: "calc(env(safe-area-inset-top))",
   },
-  position: "relative",
   zIndex: 1,
 }));
 
@@ -83,6 +82,7 @@ const CardFront = styled(CardSide)(({ theme }) => ({
   borderRadius: 0,
   paddingTop: "calc(env(safe-area-inset-top) + 25px)",
   overflow: "hidden",
+  // position: "relative",
 }));
 
 const CardBack = styled(CardSide)(({ theme }) => ({
@@ -265,7 +265,7 @@ const BankCard = ({
             <Box
               sx={{
                 position: "absolute",
-                top: "10px",
+                top: "calc(env(safe-area-inset-top) + 12px)",
                 right: "10px",
                 display: "flex",
                 gap: 1,
@@ -277,18 +277,11 @@ const BankCard = ({
                   resetProgress(balance);
                 }}
                 sx={{
-                  top: "calc(env(safe-area-inset-top) + 12px)",
-                  right: "50px",
                   background: "transparent",
-                  fontSize: "30px",
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
-                  lineHeight: "1",
-                  padding: "0",
-                  minWidth: "unset",
-                  minHeight: "unset",
                   color: "white",
+                  padding: 0,
+                  minWidth: "30px",
+                  minHeight: "30px",
                   "&:focus": {
                     outline: "none",
                   },
@@ -304,8 +297,6 @@ const BankCard = ({
                   handleOpen();
                 }}
                 sx={{
-                  top: "calc(env(safe-area-inset-top) + 12px)",
-                  right: "10px",
                   background: "transparent",
                   fontSize: "30px",
                   width: "30px",

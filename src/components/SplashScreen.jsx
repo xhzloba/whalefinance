@@ -13,12 +13,6 @@ const float = keyframes`
   50% { transform: translateY(-10px); }
 `;
 
-const waveAnimation = keyframes`
-  0% { transform: translateX(0) translateZ(0) scaleY(1); }
-  50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
-  100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
-`;
-
 const SplashContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -43,28 +37,6 @@ const Logo = styled("img")({
   animation: `${float} 3s ease-in-out infinite`,
   position: "relative",
   filter: "drop-shadow(2px 4px 6px black)",
-});
-
-const WaveEffect = styled(Box)({
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  width: "200%",
-  height: "150px",
-  overflow: "hidden",
-  zIndex: 1,
-  "& > svg": {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    height: "100%",
-    animation: `${waveAnimation} 10s linear infinite`,
-    filter: "drop-shadow(0 -10px 20px rgba(0, 87, 168, 0.7))",
-    "&:nth-of-type(2)": {
-      animationDelay: "-5s",
-      opacity: 0.7,
-    },
-  },
 });
 
 const AnimatedTypography = styled(Typography)`
@@ -176,20 +148,7 @@ const SplashScreen = ({ onFinish }) => {
       <LogoContainer ref={logoRef}>
         <Logo src={logoImage} alt="Whale Finance Logo" />
       </LogoContainer>
-      <WaveEffect>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path
-            fill="rgba(255, 255, 255, 0.5)"
-            d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          ></path>
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path
-            fill="rgba(255, 255, 255, 0.3)"
-            d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          ></path>
-        </svg>
-      </WaveEffect>
+
       <AnimatedTypography variant="h4" gutterBottom>
         Whale Finance
       </AnimatedTypography>
