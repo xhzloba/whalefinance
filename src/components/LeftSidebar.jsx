@@ -14,7 +14,6 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import RubleIcon from "./icons/RubleIcon";
 import CardIcon from "./icons/CardIcon";
 import SafeIcon from "./icons/SafeIcon";
-import FlagIcon from "@mui/icons-material/Flag"; // Добавьте импорт иконки для целей
 
 const paperStyle = {
   background: "rgb(255, 255, 255)",
@@ -143,105 +142,6 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
     );
   };
 
-  const GoalsSection = () => {
-    const [expanded, setExpanded] = useState(true);
-
-    const handleExpand = (event) => {
-      event.stopPropagation();
-      setExpanded(!expanded);
-    };
-
-    const handleAddClick = (event) => {
-      event.stopPropagation();
-      // Здесь можно добавить логику для создания новой цели
-    };
-
-    return (
-      <Accordion
-        expanded={expanded}
-        onChange={() => {}}
-        sx={{
-          boxShadow: "none",
-          "&:before": { display: "none" },
-          backgroundColor: "transparent",
-          transition: "height 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        }}
-      >
-        <AccordionSummary
-          sx={{
-            padding: 0,
-            "& .MuiAccordionSummary-content": {
-              margin: 0,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            },
-          }}
-        >
-          <Box
-            onClick={handleExpand}
-            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          >
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: "bold",
-                mr: 1,
-                color: "rgb(38, 38, 38)",
-                fontFamily: '"SB Sans Display Semibold", sans-serif',
-              }}
-            >
-              Цели и конверты
-            </Typography>
-            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </Box>
-          <IconButton
-            size="small"
-            sx={{ color: "success.main" }}
-            onClick={handleAddClick}
-          >
-            <AddIcon sx={{ color: themeColor }} />
-          </IconButton>
-        </AccordionSummary>
-        <AccordionDetails
-          sx={{ padding: 0, paddingTop: 1, overflow: "hidden" }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-              opacity: expanded ? 1 : 0,
-            }}
-          >
-            <FlagIcon sx={{ color: themeColor, width: 36, height: 36 }} />
-            <Box sx={{ ml: 1 }}>
-              <Typography
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: "19px",
-                  color: "rgb(38, 38, 38)",
-                  fontFamily: '"SB Sans Text", sans-serif',
-                }}
-              >
-                Создайте новую цель
-              </Typography>
-              <Typography
-                sx={{
-                  color: "rgba(38, 38, 38, 0.7)",
-                  fontSize: "13px",
-                  fontFamily: '"SB Sans Text", sans-serif',
-                }}
-              >
-                Начните копить прямо сейчас
-              </Typography>
-            </Box>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-    );
-  };
-
   return (
     <Paper
       sx={{
@@ -319,7 +219,6 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
           </Typography>
         }
       />
-      <GoalsSection />
     </Paper>
   );
 }

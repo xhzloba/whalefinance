@@ -308,14 +308,22 @@ function TransactionList({ transactions, onDeleteTransaction }) {
           {sortedGroupedTransactions.map(
             ([dateString, { date, transactions, totalExpenses }]) => (
               <React.Fragment key={dateString}>
-                <ListItem>
+                <ListItem sx={{ paddingLeft: 0 }}>
                   <ListItemText
                     primary={date.format("D MMMM YYYY")}
                     secondary={`Общие расходы: ${totalExpenses.toFixed(2)} ₽`}
                   />
                 </ListItem>
                 {transactions.map((transaction) => (
-                  <ListItem key={transaction.id}>
+                  <ListItem
+                    key={transaction.id}
+                    sx={{
+                      paddingLeft: "0px",
+                      "& .MuiListItem-root": {
+                        paddingLeft: 0,
+                      },
+                    }}
+                  >
                     <ListItemAvatar>{getIcon(transaction)}</ListItemAvatar>
                     <ListItemText
                       primary={

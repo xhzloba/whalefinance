@@ -168,7 +168,7 @@ const AnimatedValue = ({ value, suffix = "" }) => {
       }
     }, animationDuration / steps);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(timer);ƒ
   }, [value]);
 
   return (
