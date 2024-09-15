@@ -31,12 +31,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TransactionList from "./TransactionList";
 import IncomeExpenseForm from "./IncomeExpenseForm";
 import LeftSidebar from "./LeftSidebar";
-import Summary from "./Summary";
-import dayjs from "dayjs";
 import BankCard from "./BankCard";
 import ExpenseAnalysis from "./ExpenseAnalysis";
 import CategoryLimits from "./CategoryLimits";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import dayjs from "dayjs"; // Added this line
 
 import { db } from "../firebaseConfig";
 import {
@@ -191,7 +190,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
         console.log("Базовая сумма:", baseAmount);
         console.log("Расходы с последнего дохода/сброса:", totalExpenses);
-        console.log("Процент расходов:", expensePercentage);
+        console.log("Процент расхо��ов:", expensePercentage);
         console.log(
           "Значение прогресс-бара:",
           Math.min(expensePercentage, 100)
@@ -560,16 +559,6 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
               }}
             >
               <Grid container spacing={{ xs: 6, sm: 3 }}>
-                <Grid item xs={12}>
-                  <Summary
-                    balance={balance}
-                    lastIncomeDate={lastIncomeDate}
-                    lastIncomeAmount={lastIncomeAmount}
-                    currentMonthExpenses={currentMonthExpenses}
-                    progressValue={progressValue}
-                    transactions={transactions}
-                  />
-                </Grid>
                 <Grid item xs={12}></Grid>
                 <Grid item xs={12}>
                   <StyledAccordion

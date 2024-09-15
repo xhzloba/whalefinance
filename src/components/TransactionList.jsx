@@ -11,11 +11,10 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FaceIcon from "@mui/icons-material/Face";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import LocalActivityIcon from "@mui/icons-material/LocalActivity";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import HomeIcon from "@mui/icons-material/Home";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -29,11 +28,13 @@ import "dayjs/locale/ru";
 import dayjs from "dayjs";
 import ExportToExcelButton from "./ExportToExcelButton";
 import { Timestamp } from "firebase/firestore";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const categoryColors = {
   "Транспорт и Связь": { background: "#1a4cff34", iconColor: "#d35400" },
   "Онлайн покупки": { background: "#f951ff19", iconColor: "#d42ec6" },
   "Красота и Здоровье": { background: "#7aff7c61", iconColor: "#3caa28de" },
+  "Отдых и развлечение": { background: "#ffa50061", iconColor: "#ff8c00" },
   Прочее: { background: "#d2d7d361", iconColor: "#7f8c8d" },
   Кредиты: { background: "#f1c40f61", iconColor: "#f39c12" },
   Продукты: { background: "#e74c3c61", iconColor: "#c0392b" },
@@ -47,13 +48,14 @@ const categoryIcons = {
   "Транспорт и Связь": DirectionsBusIcon,
   "Онлайн покупки": ShoppingCartIcon,
   "Красота и Здоровье": FaceIcon,
+  "Отдых и развлечение": LocalActivityIcon,
   Прочее: HelpOutlineIcon,
   Кредиты: AccountBalanceIcon,
   Продукты: ShoppingBasketIcon,
   "ЖКХ и Квартира": HomeIcon,
   income: AttachMoneyIcon,
   Рестораны: LocalDiningIcon,
-  "ереводы онлайн": AttachMoneyIcon,
+  "Переводы онлайн": AttachMoneyIcon,
 };
 
 const formatCurrency = (amount) => {
@@ -308,11 +310,35 @@ function TransactionList({ transactions, onDeleteTransaction }) {
           {sortedGroupedTransactions.map(
             ([dateString, { date, transactions, totalExpenses }]) => (
               <React.Fragment key={dateString}>
-                <ListItem sx={{ paddingLeft: 0 }}>
-                  <ListItemText
-                    primary={date.format("D MMMM YYYY")}
-                    secondary={`Общие расходы: ${totalExpenses.toFixed(2)} ₽`}
-                  />
+                <ListItem
+                  sx={{
+                    paddingLeft: 0,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      ...getDateStyle(),
+                      padding: 0,
+                      paddingTop: "16px",
+                    }}
+                  >
+                    {date.format("D MMMM YYYY")}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      ...getDateStyle(),
+                      padding: 0,
+                      paddingTop: "16px",
+                      color: "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    {formatCurrency(totalExpenses)} ₽
+                  </Typography>
                 </ListItem>
                 {transactions.map((transaction) => (
                   <ListItem
@@ -359,7 +385,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
               variant="outlined"
               onClick={() => setVisibleTransactions((prev) => prev + 2)}
             >
-              Показать еще
+              Покзать еще
             </Button>
           </Box>
         )}
