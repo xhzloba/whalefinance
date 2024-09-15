@@ -247,7 +247,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
       <div>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography
+          {/* <Typography
             variant="h6"
             sx={{
               flexGrow: 1,
@@ -255,7 +255,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
             }}
           >
             История операций
-          </Typography>
+          </Typography> */}
           <Button
             variant="outlined"
             size="small"

@@ -167,6 +167,10 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
         borderTopLeftRadius: {
           xs: 42,
         },
+        borderBottom: {
+          xs: "1px solid #f5f4f4",
+          sm: "none",
+        },
         boxShadow: {
           xs: isPulsing ? "none" : "0px -13px 13px #00dfff",
           sm: "rgba(38, 38, 38, 0.04) 0px 1px 2px, rgba(38, 38, 38, 0.16) 0px 4px 8px",
