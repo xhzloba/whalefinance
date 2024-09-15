@@ -133,12 +133,17 @@ function TransactionList({ transactions, onDeleteTransaction }) {
     const IconComponent =
       transaction.type === "income"
         ? categoryIcons["income"]
-        : categoryIcons[category] || HelpOutlineIcon;
+        : categoryIcons[category] || LocalActivityIcon;
     const { background, iconColor } =
-      categoryColors[category] || categoryColors["Прочее"];
+      categoryColors[category] || categoryColors["Отдых и развлечение"];
 
     return (
-      <Avatar sx={{ bgcolor: background }}>
+      <Avatar
+        sx={{
+          bgcolor: background,
+          boxShadow: "7px 0px 4px #b8b6b6", // Добавлена тень
+        }}
+      >
         <IconComponent sx={{ color: iconColor }} />
       </Avatar>
     );
@@ -216,7 +221,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
 
   const getMonthYearStyle = () => {
     return {
-      fontFamily: '"SB Sans Display Semibold", sans-serif',
+      fontFamily: '"SB Sans Display Semibold", sans-serif !important',
       fontSize: "15px",
       color: "rgb(38, 38, 38)",
     };
@@ -242,8 +247,14 @@ function TransactionList({ transactions, onDeleteTransaction }) {
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
       <div>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="h6" sx={{ flexGrow: 1, ...getMonthYearStyle() }}>
-            {selectedMonth ? formatMonthYear(selectedMonth) : "Все операции"}
+          <Typography
+            variant="h6"
+            sx={{
+              flexGrow: 1,
+              ...getMonthYearStyle(),
+            }}
+          >
+            История операций
           </Typography>
           <Button
             variant="outlined"
@@ -344,7 +355,7 @@ function TransactionList({ transactions, onDeleteTransaction }) {
                   <ListItem
                     key={transaction.id}
                     sx={{
-                      paddingLeft: "0px",
+                      paddingLeft: 0,
                       "& .MuiListItem-root": {
                         paddingLeft: 0,
                       },

@@ -168,7 +168,7 @@ function LeftSidebar({ balance, savingsBalance, themeColor, isPulsing }) {
           xs: 42,
         },
         boxShadow: {
-          xs: isPulsing ? "none" : "0px -11px 30px #00dfff",
+          xs: isPulsing ? "none" : "0px -13px 13px #00dfff",
           sm: "rgba(38, 38, 38, 0.04) 0px 1px 2px, rgba(38, 38, 38, 0.16) 0px 4px 8px",
         },
         position: "relative",

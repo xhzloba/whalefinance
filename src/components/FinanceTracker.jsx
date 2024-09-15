@@ -190,7 +190,7 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
 
         console.log("Базовая сумма:", baseAmount);
         console.log("Расходы с последнего дохода/сброса:", totalExpenses);
-        console.log("Процент расхо��ов:", expensePercentage);
+        console.log("Процент расхоов:", expensePercentage);
         console.log(
           "Значение прогресс-бара:",
           Math.min(expensePercentage, 100)
@@ -576,7 +576,15 @@ const FinanceTracker = ({ themeColor, onColorChange }) => {
                       aria-controls="panel2bh-content"
                       id="panel2bh-header"
                     >
-                      <Typography variant="h6">История операций</Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontFamily: '"SB Sans Display Semibold", sans-serif',
+                          fontWeight: 600,
+                        }}
+                      >
+                        История операций
+                      </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <TransactionList
